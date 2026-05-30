@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2026 Családi Foci Tippverseny</title>
+    <style>
+        :root {
+            --primary: #c8102e; /* VB pirosas szín */
+            --bg: #f4f4f9;
+            --text: #333;
+            --card-bg: #fff;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 20px;
+        }
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        h1 {
+            color: var(--primary);
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .nav-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        button {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #a00d24;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: center;
+        }
+        th {
+            background-color: var(--primary);
+            color: white;
+        }
+        .hidden {
+            display: none;
+        }
+        .form-group {
+            margin-bottom: 15px;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        input[type="text"], input[type="number"] {
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .match-card {
+            border: 1px solid #eee;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+            background: #fafafa;
+        }
+        .teams {
+            font-weight: bold;
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+        hr { border: 0; border-top: 1px solid #ddd; margin: 20px 0; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>🏆 2026 VB Családi Tippverseny 🏆</h1>
+        <div class="nav-buttons">
+            <button onclick="showView('leaderboard')">Ranglista</button>
+            <button onclick="tryAdmin()">Admin Felület</button>
+        </div>
+    </header>
+
+    <div class="container">
+        <div id="leaderboard-view">
+            <h2>Játékosok és Pontszámok</h2>
+            <p>Szabályok: Telitalálat: <b>5 pont</b> | Győztes + pontos gólkülönbség: <b>3 pont</b> | Csak győztes: <b>1 pont</b></p>
+            <table id="ranking-table">
+                <thead>
+                    <tr>
+                        <th>Helyezés</th>
+                        <th>Játékos</th>
+                        <th>Pontszám</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    </tbody>
+            </table>
+        </div>
+
+        <div id="admin-view" class="hidden">
+            <h2>Adminisztráció</h2>
+            
+            <div class="match-card">
+                <h3>Játékos hozzáadása</h3>
+                <div class="form-group">
+                    <input type="text" id="new-player-name" placeholder="Játékos neve">
+                    <button onclick="addPlayer()">Hozzáadás</button>
+                </div>
+            </div>
+
+            <div class="match-card">
+                <h3>Új Mérkőzés hozzáadása</h3>
+                <div class="form-group">
+                    <input type="text" id="new-match-team1" placeholder="Hazai csapat (pl. Mexikó)">
+                    <span>-</span>
+                    <input type="text" id="new-match-team2" placeholder="Vendég csapat">
+                    <button onclick="addMatch()">Mérkőzés felvitele</button>
+                </div>
+            </div>
+
+            <hr>
+
+            <h3>Mérkőzések kezelése & Eredmények/Tippek</h3>
+            <div id="admin-matches">
+                </div>
+            
+            <button onclick="resetData()" style="background-color: #555; margin-top: 20px;">Összes adat törlése (Veszélyes!)</button>
+        </div>
+    </div>
+
+    <script>
+        // --- ADATSTRUKTÚRA ---
+        let players = JSON.parse(localStorage.getItem('vb26_players')) || [];
+        let matches = JSON.parse(localStorage.getItem('vb26_matches')) || [
+            // Néhány előre felvitt nyitómeccs a 2026-os FIFA naptár alapján
+            { id: 1, team1: "Mexikó", team2: "TBD (A2)", act1: null, act2: null, predictions: {} },
+            { id: 2, team1: "Kanada", team2: "TBD (B2)", act1: null, act2: null, predictions: {} },
+            { id: 3, team1: "USA", team2: "TBD (D2)", act1: null, act2: null, predictions: {} }
+        ];
+
+        // --- PONTKÁLZULÁCIÓ ---
+        function calculatePoints(pred1, pred2, act1, act2) {
+            if (pred1 == null || pred2 == null || act1 == null || act2 == null) return 0;
+            pred1 = parseInt(pred1); pred2 = parseInt(pred2);
+            act1 = parseInt(act1); act2 = parseInt(act2);
+
+            if (pred1 === act1 && pred2 === act2) return 5; // Telitalálat
+
+            let predDiff = pred1 - pred2;
+            let actDiff = act1 - act2;
+            
+            let predWinner = predDiff > 0 ? 1 : (predDiff < 0 ? -1 : 0);
+            let actWinner = actDiff > 0 ? 1 : (actDiff < 0 ? -1 : 0);
+
+            if (predWinner === actWinner) {
+                if (predDiff === actDiff) return 3; // Győztes és pontos gólkülönbség
+                return 1; // Csak győztes (irány) stimmel
+            }
+
+            return 0; // Nem nyert
+        }
+
+        // --- ADATMENTÉS ÉS FRISSÍTÉS ---
+        function saveData() {
+            localStorage.setItem('vb26_players', JSON.stringify(players));
+            localStorage.setItem('vb26_matches', JSON.stringify(matches));
+            renderLeaderboard();
+            renderAdminMatches();
+        }
+
+        // --- NAVIGÁCIÓ ---
+        function showView(viewId) {
+            document.getElementById('leaderboard-view').classList.add('hidden');
+            document.getElementById('admin-view').classList.add('hidden');
+            document.getElementById(viewId + '-view').classList.remove('hidden');
+        }
+
+        function tryAdmin() {
+            let pwd = prompt("Kérlek, add meg az admin jelszót (alapértelmezett: admin):");
+            if (pwd === "admin") {
+                showView('admin');
+                renderAdminMatches();
+            } else if (pwd !== null) {
+                alert("Helytelen jelszó!");
+            }
+        }
+
+        // --- ADMIN FUNKCIÓK ---
+        function addPlayer() {
+            let name = document.getElementById('new-player-name').value.trim();
+            if (name === "") return;
+            if (players.some(p => p.name === name)) {
+                alert("Ez a játékos már létezik!");
+                return;
+            }
+            players.push({ name: name });
+            document.getElementById('new-player-name').value = '';
+            saveData();
+        }
+
+        function addMatch() {
+            let t1 = document.getElementById('new-match-team1').value.trim();
+            let t2 = document.getElementById('new-match-team2').value.trim();
+            if (t1 === "" || t2 === "") return;
+            
+            let newId = matches.length > 0 ? Math.max(...matches.map(m => m.id)) + 1 : 1;
+            matches.push({
+                id: newId,
+                team1: t1,
+                team2: t2,
+                act1: null,
+                act2: null,
+                predictions: {}
+            });
+            
+            document.getElementById('new-match-team1').value = '';
+            document.getElementById('new-match-team2').value = '';
+            saveData();
+        }
+
+        function setMatchResult(matchId) {
+            let r1 = document.getElementById(`act1-${matchId}`).value;
+            let r2 = document.getElementById(`act2-${matchId}`).value;
+            let match = matches.find(m => m.id === matchId);
+            
+            match.act1 = r1 !== "" ? parseInt(r1) : null;
+            match.act2 = r2 !== "" ? parseInt(r2) : null;
+            
+            saveData();
+            alert("Végeredmény mentve! Pontszámok frissítve.");
+        }
+
+        function setPrediction(matchId, playerName) {
+            let p1 = document.getElementById(`pred1-${matchId}-${playerName}`).value;
+            let p2 = document.getElementById(`pred2-${matchId}-${playerName}`).value;
+            let match = matches.find(m => m.id === matchId);
+            
+            if (p1 !== "" && p2 !== "") {
+                match.predictions[playerName] = { p1: parseInt(p1), p2: parseInt(p2) };
+            } else {
+                delete match.predictions[playerName];
+            }
+            saveData();
+        }
+
+        function deleteMatch(matchId) {
+            if(confirm("Biztos törlöd ezt a mérkőzést?")) {
+                matches = matches.filter(m => m.id !== matchId);
+                saveData();
+            }
+        }
+
+        function resetData() {
+            if(confirm("BZTOSAN TÖRLÖL MINDEN ADATOT? (Játékosok és meccsek is elvesznek!)")) {
+                localStorage.removeItem('vb26_players');
+                localStorage.removeItem('vb26_matches');
+                location.reload();
+            }
+        }
+
+        // --- MEGJELENÍTÉS (RENDER) ---
+        function renderLeaderboard() {
+            // Pontok újraszámolása
+            let scores = {};
+            players.forEach(p => scores[p.name] = 0);
+
+            matches.forEach(m => {
+                if (m.act1 !== null && m.act2 !== null) {
+                    players.forEach(p => {
+                        if (m.predictions[p.name]) {
+                            let pts = calculatePoints(
+                                m.predictions[p.name].p1, 
+                                m.predictions[p.name].p2, 
+                                m.act1, 
+                                m.act2
+                            );
+                            scores[p.name] += pts;
+                        }
+                    });
+                }
+            });
+
+            // Rendezés
+            let sortedPlayers = players.map(p => ({
+                name: p.name,
+                score: scores[p.name]
+            })).sort((a, b) => b.score - a.score);
+
+            let tbody = document.querySelector("#ranking-table tbody");
+            tbody.innerHTML = "";
+            if (sortedPlayers.length === 0) {
+                tbody.innerHTML = "<tr><td colspan='3'>Még nincsenek játékosok.</td></tr>";
+                return;
+            }
+
+            sortedPlayers.forEach((p, index) => {
+                let row = `<tr>
+                    <td>${index + 1}.</td>
+                    <td>${p.name}</td>
+                    <td><strong>${p.score} pont</strong></td>
+                </tr>`;
+                tbody.innerHTML += row;
+            });
+        }
+
+        function renderAdminMatches() {
+            let container = document.getElementById('admin-matches');
+            container.innerHTML = "";
+            
+            matches.forEach(m => {
+                let div = document.createElement('div');
+                div.className = 'match-card';
+                
+                // Meccs fejléc és végeredmény beállítás
+                let html = `
+                    <div class="teams">${m.team1} - ${m.team2}
