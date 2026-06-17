@@ -3,421 +3,747 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>2026 Családi Tippverseny</title>
+    <title>Szabadulószoba - Titkos Mesterségek</title>
     <style>
         :root {
-            --primary: #c2002f;
-            --bg: #f4f7f6;
-            --card-bg: #ffffff;
-            --text: #333333;
+            --bg-color: #050505;
+            --card-bg: #111a22;
+            --text-color: #00ffcc;
+            --text-light: #a9b7c6;
+            --btn-bg: #008f7a;
+            --btn-hover: #00ffcc;
+            --alert-color: #ff3b3b;
+            --hint-color: #ffaa00;
+            --virus-color: #ff0055;
         }
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg);
-            color: var(--text);
+
+        * {
+            box-sizing: border-box;
             margin: 0;
+            padding: 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-light);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
             padding: 20px;
+            background-image: radial-gradient(circle at 50% 50%, #111a22 0%, #050505 100%);
+            transition: background-color 0.5s;
+        }
+
+        body.virus-active {
+            background-image: radial-gradient(circle at 50% 50%, #3a0000 0%, #050505 100%);
+        }
+
+        .container {
+            background-color: rgba(17, 26, 34, 0.85);
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 0 30px rgba(0, 255, 204, 0.15);
+            max-width: 650px;
+            width: 100%;
+            text-align: center;
+            border: 1px solid var(--btn-bg);
+            backdrop-filter: blur(5px);
+            transition: all 0.5s;
+            position: relative;
+        }
+
+        .container.virus-active {
+            border-color: var(--virus-color);
+            box-shadow: 0 0 30px rgba(255, 0, 85, 0.3);
+            animation: glitch-box 2s infinite;
+        }
+
+        @keyframes glitch-box {
+            0% { transform: translate(0) }
+            20% { transform: translate(-2px, 1px) }
+            40% { transform: translate(-1px, -1px) }
+            60% { transform: translate(2px, 1px) }
+            80% { transform: translate(1px, -1px) }
+            100% { transform: translate(0) }
+        }
+
+        h1 {
+            color: var(--text-color);
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            font-size: 1.8rem;
+            text-shadow: 0 0 10px rgba(0,255,204,0.3);
+        }
+        
+        .virus-active h1 { color: var(--virus-color); text-shadow: 0 0 10px rgba(255,0,85,0.5); }
+
+        .header-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(0, 143, 122, 0.5);
+        }
+
+        .level-indicator { font-size: 1.2rem; font-weight: bold; }
+
+        .timer {
+            font-size: 1.5rem;
+            color: var(--text-color);
+            font-weight: bold;
+            background: #000;
+            padding: 5px 15px;
+            border-radius: 4px;
+            border: 1px solid var(--text-color);
+            letter-spacing: 2px;
+            transition: color 0.3s, border-color 0.3s;
+        }
+
+        .timer.warning {
+            color: var(--alert-color);
+            border-color: var(--alert-color);
+            animation: pulse 1s infinite alternate;
+        }
+
+        @keyframes pulse {
+            from { box-shadow: 0 0 5px var(--alert-color); }
+            to { box-shadow: 0 0 20px var(--alert-color); }
+        }
+
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            min-height: 35px;
+        }
+
+        .nav-btn {
+            background: transparent;
+            color: var(--text-light);
+            border: 1px solid var(--text-light);
+            padding: 5px 15px;
+            border-radius: 3px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .nav-btn:hover { background: rgba(255,255,255,0.1); color: #fff; }
+
+        .riddle-box {
+            background-color: #000;
+            padding: 25px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+            line-height: 1.6;
+            border-left: 5px solid var(--text-color);
+            text-align: left;
+            min-height: 120px;
+            cursor: pointer;
+            position: relative;
+            white-space: pre-wrap; 
+        }
+
+        .virus-active .riddle-box { border-left-color: var(--virus-color); color: #ff9999; }
+
+        .cursor {
+            display: inline-block;
+            width: 8px;
+            height: 18px;
+            background-color: var(--text-color);
+            animation: blink 1s step-end infinite;
+            vertical-align: text-bottom;
+        }
+        
+        .virus-active .cursor { background-color: var(--virus-color); }
+
+        @keyframes blink { 50% { opacity: 0; } }
+
+        .hint-section { margin-bottom: 20px; min-height: 40px; }
+
+        .hint-btn {
+            background-color: transparent;
+            color: var(--hint-color);
+            border: 1px dashed var(--hint-color);
+            padding: 8px 15px;
+            font-size: 0.9rem;
+            border-radius: 3px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .hint-btn:hover {
+            background-color: rgba(255, 170, 0, 0.1);
+            box-shadow: 0 0 10px rgba(255, 170, 0, 0.3);
+        }
+
+        .hint-text {
+            color: var(--hint-color);
+            font-style: italic;
+            font-size: 1rem;
+            padding: 10px;
+            background: rgba(255, 170, 0, 0.05);
+            border-radius: 5px;
+        }
+
+        input[type="text"] {
+            width: 80%;
+            padding: 15px;
+            font-size: 1.2rem;
+            border: 2px solid var(--btn-bg);
+            border-radius: 5px;
+            margin-bottom: 20px;
+            background-color: #000;
+            color: var(--text-color);
+            outline: none;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: bold;
+        }
+
+        input[type="text"]:disabled {
+            border-color: #333;
+            color: #555;
+            background-color: #0a0a0a;
+            cursor: not-allowed;
+        }
+
+        .virus-active input[type="text"] {
+            border-color: var(--virus-color);
+            color: var(--virus-color);
+        }
+
+        input[type="text"]:focus { box-shadow: 0 0 15px var(--btn-bg); }
+        .virus-active input[type="text"]:focus { box-shadow: 0 0 15px var(--virus-color); }
+
+        .main-btn {
+            background-color: var(--btn-bg);
+            color: #000;
+            border: none;
+            padding: 15px 35px;
+            font-size: 1.1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+        
+        .main-btn:disabled {
+            background-color: #333;
+            color: #666;
+            cursor: not-allowed;
+            box-shadow: none !important;
+            transform: none !important;
+        }
+
+        .virus-active .main-btn:not(:disabled) { background-color: var(--virus-color); color: #fff; }
+        .main-btn:not(:disabled):hover { transform: translateY(-2px); box-shadow: 0 0 15px var(--btn-hover); }
+        .virus-active .main-btn:not(:disabled):hover { box-shadow: 0 0 15px var(--virus-color); }
+
+        .message { margin-top: 20px; min-height: 24px; font-weight: bold; font-size: 1.1rem; line-height: 1.5; }
+        .error { color: var(--alert-color); }
+        .success { color: var(--text-color); }
+
+        .hidden { display: none !important; }
+
+        .reset-btn {
+            background-color: transparent;
+            color: #555;
+            font-size: 0.8rem;
+            margin-top: 40px;
+            padding: 5px;
+            border: none;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+        .reset-btn:hover { color: #888; }
+
+        .shake { animation: shake 0.4s; }
+        @keyframes shake {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            50% { transform: translateX(10px); }
+            75% { transform: translateX(-10px); }
+            100% { transform: translateX(0); }
+        }
+        
+        .time-penalty-anim {
+            position: absolute;
+            color: var(--alert-color);
+            font-size: 2rem;
+            font-weight: bold;
+            top: 40px;
+            right: 40px;
+            animation: floatUp 1.5s forwards;
+            pointer-events: none;
+            z-index: 100;
+        }
+
+        @keyframes floatUp {
+            0% { opacity: 1; transform: translateY(0); }
+            100% { opacity: 0; transform: translateY(-50px); }
+        }
+
+        /* Intro Screen Styles */
+        #intro-screen {
             display: flex;
             flex-direction: column;
             align-items: center;
-        }
-        .container {
-            max-width: 900px;
-            width: 100%;
-            background: var(--card-bg);
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            box-sizing: border-box;
-        }
-        .header {
-            text-align: center;
-            margin-bottom: 30px;
-            border-bottom: 2px solid var(--primary);
-            padding-bottom: 15px;
-        }
-        h1, h2, h3 {
-            color: var(--primary);
-            text-align: center;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 20px;
-            background: white;
-        }
-        table, th, td {
-            border: 1px solid #dddddd;
-        }
-        th, td {
-            padding: 10px;
-            text-align: center;
-        }
-        th {
-            background-color: var(--primary);
-            color: white;
-        }
-        .btn {
-            background-color: var(--primary);
-            color: white;
-            border: none;
-            padding: 10px 15px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: background 0.3s;
-        }
-        .btn:hover {
-            background-color: #8f0022;
-        }
-        .admin-login-btn {
-            display: block;
-            margin: 30px auto 0;
-            background-color: #555;
-        }
-        .admin-section {
-            display: none;
-            margin-top: 40px;
-            padding-top: 20px;
-            border-top: 3px dashed #333;
-        }
-        .form-group {
-            margin-bottom: 15px;
-            display: flex;
-            gap: 10px;
             justify-content: center;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-        input[type="text"], input[type="number"], textarea {
-            padding: 8px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-        input[type="number"] {
-            width: 60px;
             text-align: center;
         }
-        .match-card {
-            background: #f9f9f9;
-            border: 1px solid #eee;
-            padding: 15px;
-            margin-bottom: 15px;
+        #intro-screen h1 { color: var(--text-color); font-size: 2.5rem; margin-bottom: 20px; }
+        .warning-box {
+            border: 2px solid var(--alert-color);
+            background-color: rgba(255, 59, 59, 0.1);
+            padding: 20px;
             border-radius: 8px;
+            margin: 20px 0;
+            color: #fff;
         }
-        .played-match-card {
-            background: #fff3f5;
-            border: 1px solid #ffccd5;
-            padding: 15px;
-            margin-bottom: 20px;
-            border-radius: 8px;
-        }
-        .played-match-card h4 {
-            margin: 0 0 10px 0;
-            text-align: center;
-            font-size: 1.2em;
-            color: #8f0022;
-        }
-        .github-export {
-            background: #282c34;
-            color: #abb2bf;
-            padding: 15px;
-            border-radius: 8px;
-            font-family: monospace;
-            width: 100%;
-            height: 250px;
-            box-sizing: border-box;
-            margin-top: 10px;
-        }
-        .info-text {
-            text-align: center;
-            font-size: 0.9em;
-            color: #666;
-            margin-bottom: 20px;
-        }
-        .team-edit-row {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin-bottom: 15px;
-            background: #e3e8e5;
-            padding: 10px;
-            border-radius: 5px;
-        }
+        .warning-box h2 { color: var(--alert-color); margin-bottom: 10px; }
     </style>
 </head>
 <body>
 
-<script>
-    // =====================================================================
-    // VIGYÁZAT: A GITHUBON EZT A RÉSZT KELL KICSERÉLNI AZ ADMIN PANELBŐL KIMÁSOLT KÓDRA!
-    // =====================================================================
-    let DATABASE = {
-      "players": [],
-      "matches": [],
-      "tips": {}
-    };
-
-    // Ha még üres a DATABASE (első futtatáskor), betöltjük mind a 104 meccset.
-    // Amikor a GitHubra exportálod a kódot, a gép ezt is felül fogja írni a tényleges adatokkal!
-    if (DATABASE.matches.length === 0) {
-        DATABASE.matches.push({ id: 1, t1: "Mexikó", t2: "A2 csapat", s1: null, s2: null });
-        DATABASE.matches.push({ id: 2, t1: "A3 csapat", t2: "A4 csapat", s1: null, s2: null });
-        DATABASE.matches.push({ id: 3, t1: "Kanada", t2: "B2 csapat", s1: null, s2: null });
-        DATABASE.matches.push({ id: 4, t1: "USA", t2: "D2 csapat", s1: null, s2: null });
-        // Csoportkör folytatása (5-72)
-        for(let i = 5; i <= 72; i++) DATABASE.matches.push({ id: i, t1: `Csoportkör ${i}. (Hazai)`, t2: `Csoportkör ${i}. (Vendég)`, s1: null, s2: null });
-        // Egyenes kiesés (73-104)
-        for(let i = 73; i <= 88; i++) DATABASE.matches.push({ id: i, t1: `Legjobb 32 (M${i})`, t2: `Legjobb 32 (M${i})`, s1: null, s2: null });
-        for(let i = 89; i <= 96; i++) DATABASE.matches.push({ id: i, t1: `Nyolcaddöntő (M${i})`, t2: `Nyolcaddöntő (M${i})`, s1: null, s2: null });
-        for(let i = 97; i <= 100; i++) DATABASE.matches.push({ id: i, t1: `Negyeddöntő (M${i})`, t2: `Negyeddöntő (M${i})`, s1: null, s2: null });
-        for(let i = 101; i <= 102; i++) DATABASE.matches.push({ id: i, t1: `Elődöntő (M${i})`, t2: `Elődöntő (M${i})`, s1: null, s2: null });
-        DATABASE.matches.push({ id: 103, t1: "Bronzmérkőzés", t2: "Bronzmérkőzés", s1: null, s2: null });
-        DATABASE.matches.push({ id: 104, t1: "Döntő", t2: "Döntő", s1: null, s2: null });
-    }
-    // =====================================================================
-</script>
-
-<div class="container">
-    <div class="header">
-        <h1>2026 Családi Tippverseny</h1>
-        <p>Pontozás: Telitalálat: <strong>5p</strong> | Győztes + gólkülönbség: <strong>3p</strong> | Csak győztes: <strong>1p</strong></p>
+    <div class="container" id="intro-screen">
+        <h1>Rendszer Inicializálása</h1>
+        <p style="font-size: 1.2rem; color: var(--text-light); max-width: 500px; margin-bottom: 10px;">
+            Üdvözlünk a Project: Szabadulás operációs rendszerében. A bejutáshoz több biztonsági szintet kell feltörnöd.
+        </p>
+        <div class="warning-box">
+            <h2>⚠️ FIGYELEM: KÉSZÜLJ FEL! ⚠️</h2>
+            <p>Mielőtt elindítanád a rendszert, <strong>készíts elő papírt és ceruzát!</strong></p>
+            <p style="margin-top: 10px; font-size: 0.95rem;">Bizonyos szintek feltörése után a rendszer <strong>titkos kódmorzsákat (betűket)</strong> fog kiadni. Ezeket gondosan jegyezd fel, mert az utolsó, 20. szinten szükséged lesz rájuk a mesterjelszóhoz!</p>
+        </div>
+        <p style="margin-bottom: 30px; font-size: 0.9rem; color: #888;">Tipp: Ha elfelejtettél felírni valamit, a "◀ Előző" gombbal bármikor visszamehetsz a már megoldott szintekre megnézni az üzeneteket.</p>
+        <button class="main-btn" id="start-game-btn" style="font-size: 1.3rem;">Értettem, Rendszer Indítása</button>
     </div>
 
-    <div>
-        <h2>🏆 Ranglista</h2>
-        <table>
-            <thead>
-                <tr>
-                    <th>Helyezés</th>
-                    <th>Játékos neve</th>
-                    <th>Pontszám</th>
-                </tr>
-            </thead>
-            <tbody id="leaderboard-body">
-                </tbody>
-        </table>
-    </div>
-
-    <div style="margin-top: 40px;">
-        <h2>⚽ Lejátszott mérkőzések és tippek</h2>
-        <p class="info-text">A tippek csak azután válnak láthatóvá, miután az admin rögzítette a végeredményt.</p>
-        <div id="played-matches-container">
-            </div>
-    </div>
-
-    <button class="btn admin-login-btn" onclick="loginAdmin()">⚙️ Admin felület</button>
-
-    <div class="admin-section" id="admin-section">
-        <h2>Adminisztrációs Panel</h2>
-        <p class="info-text">Itt rögzítheted a csapatneveket, tippeket és a végeredményeket. A végén ne felejtsd el frissíteni a GitHubot!</p>
+    <div class="container hidden" id="game-container">
+        <h1 id="main-title">Project: Szabadulás</h1>
         
-        <div class="match-card">
-            <h3>👤 Játékos hozzáadása</h3>
-            <div class="form-group">
-                <input type="text" id="new-player-name" placeholder="Játékos neve">
-                <button class="btn" onclick="addPlayer()">Hozzáadás</button>
-            </div>
+        <div class="header-info" id="header-info">
+            <div class="level-indicator" id="level-display">Szint: 1 / 20</div>
+            <div class="timer" id="timer-display">02:00:00</div>
         </div>
 
-        <h3>📝 Csapatok, Tippek és Eredmények</h3>
-        <p class="info-text" style="color:var(--primary);">Itt át tudod nevezni a csapatokat, amint megtörténik a sorsolás!</p>
-        <div id="admin-matches-container">
-            </div>
-
-        <div class="match-card" style="background:#282c34; color:white; margin-top:30px;">
-            <h3 style="color:#61afef;">🚀 GitHub Frissítés</h3>
-            <p style="text-align:center; font-size:0.9em; margin-bottom:10px;">
-                Másold ki az alábbi kódot, és a GitHub index.html fájljában cseréld ki vele a <code>DATABASE</code> részt!
-            </p>
-            <textarea id="github-export-area" class="github-export" readonly></textarea>
+        <div class="nav-buttons">
+            <button class="nav-btn" id="prev-btn" style="display: none;">◀ Előző</button>
+            <button class="nav-btn" id="next-btn" style="display: none;">Következő ▶</button>
         </div>
-    </div>
-</div>
-
-<script>
-    const ADMIN_HASH = "amFrQGIyMDI1"; // jak@b2025
-    let appData = JSON.parse(JSON.stringify(DATABASE));
-
-    function loginAdmin() {
-        const pw = prompt("Kérem az admin jelszót:");
-        if (pw && btoa(pw) === ADMIN_HASH) {
-            document.getElementById('admin-section').style.display = 'block';
-            document.querySelector('.admin-login-btn').style.display = 'none';
-        } else {
-            alert("Hibás jelszó!");
-        }
-    }
-
-    function calculatePoints(tip1, tip2, act1, act2) {
-        if (act1 === null || act2 === null || tip1 === null || tip2 === null) return 0; 
-        if (tip1 === act1 && tip2 === act2) return 5;
         
-        const tipDiff = tip1 - tip2;
-        const actDiff = act1 - act2;
-        const tipWinner = tipDiff > 0 ? 1 : (tipDiff < 0 ? 2 : 0);
-        const actWinner = actDiff > 0 ? 1 : (actDiff < 0 ? 2 : 0);
-
-        if (tipWinner === actWinner) {
-            if (tipDiff === actDiff) return 3;
-            return 1;
-        }
-        return 0;
-    }
-
-    function generateGitHubExport() {
-        const exportArea = document.getElementById('github-export-area');
-        exportArea.value = "let DATABASE = " + JSON.stringify(appData, null, 2) + ";";
-    }
-
-    function addPlayer() {
-        const nameInput = document.getElementById('new-player-name');
-        const name = nameInput.value.trim();
-        if (name) {
-            const newId = appData.players.length ? Math.max(...appData.players.map(p => p.id)) + 1 : 1;
-            appData.players.push({ id: newId, name: name });
-            nameInput.value = '';
-            renderApp();
-        }
-    }
-
-    function updateTeams(matchId) {
-        const t1 = document.getElementById(`edit_t1_${matchId}`).value.trim();
-        const t2 = document.getElementById(`edit_t2_${matchId}`).value.trim();
-        const match = appData.matches.find(m => m.id === matchId);
-        if (match && t1 && t2) {
-            match.t1 = t1;
-            match.t2 = t2;
-            renderApp();
-        }
-    }
-
-    function saveMatchResult(matchId) {
-        const s1 = document.getElementById(`m_${matchId}_s1`).value;
-        const s2 = document.getElementById(`m_${matchId}_s2`).value;
-        const match = appData.matches.find(m => m.id === matchId);
-        if (match) {
-            match.s1 = s1 !== "" ? parseInt(s1) : null;
-            match.s2 = s2 !== "" ? parseInt(s2) : null;
-            renderApp();
-        }
-    }
-
-    function saveTip(matchId, playerId) {
-        const s1 = document.getElementById(`t_${matchId}_${playerId}_s1`).value;
-        const s2 = document.getElementById(`t_${matchId}_${playerId}_s2`).value;
-        const key = `${matchId}_${playerId}`;
-        
-        if (s1 !== "" && s2 !== "") {
-            appData.tips[key] = { s1: parseInt(s1), s2: parseInt(s2) };
-            renderApp();
-        }
-    }
-
-    function renderApp() {
-        let playerScores = appData.players.map(p => ({ id: p.id, name: p.name, points: 0 }));
-        
-        appData.matches.forEach(match => {
-            if (match.s1 !== null && match.s2 !== null) {
-                playerScores.forEach(player => {
-                    const tip = appData.tips[`${match.id}_${player.id}`];
-                    if (tip) player.points += calculatePoints(tip.s1, tip.s2, match.s1, match.s2);
-                });
-            }
-        });
-
-        playerScores.sort((a, b) => b.points - a.points);
-
-        const tbody = document.getElementById('leaderboard-body');
-        tbody.innerHTML = '';
-        if (playerScores.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="3">Még nincsenek játékosok.</td></tr>';
-        } else {
-            playerScores.forEach((p, index) => {
-                tbody.innerHTML += `<tr><td><b>${index + 1}.</b></td><td>${p.name}</td><td><b>${p.points}</b></td></tr>`;
-            });
-        }
-
-        const playedContainer = document.getElementById('played-matches-container');
-        playedContainer.innerHTML = '';
-        let hasPlayed = false;
-
-        appData.matches.forEach(match => {
-            if (match.s1 !== null && match.s2 !== null) {
-                hasPlayed = true;
-                let html = `
-                    <div class="played-match-card">
-                        <h4>${match.t1} &nbsp;${match.s1} - ${match.s2}&nbsp; ${match.t2}</h4>
-                        <table>
-                            <tr><th>Játékos</th><th>Tipp</th><th>Pont</th></tr>
-                `;
-                appData.players.forEach(player => {
-                    const tip = appData.tips[`${match.id}_${player.id}`];
-                    const tipStr = tip ? `${tip.s1} - ${tip.s2}` : "Nem tippelt";
-                    const pts = tip ? calculatePoints(tip.s1, tip.s2, match.s1, match.s2) : 0;
-                    html += `<tr><td>${player.name}</td><td>${tipStr}</td><td><b>${pts}</b></td></tr>`;
-                });
-                html += `</table></div>`;
-                playedContainer.innerHTML += html;
-            }
-        });
-        
-        if (!hasPlayed) {
-            playedContainer.innerHTML = '<p style="text-align:center;">Még nincs rögzített eredmény.</p>';
-        }
-
-        const adminContainer = document.getElementById('admin-matches-container');
-        adminContainer.innerHTML = '';
-        
-        appData.matches.forEach(match => {
-            let matchHtml = `
-                <div class="match-card">
-                    <h4 style="text-align:center; margin-top:0;">${match.id}. Mérkőzés</h4>
-                    
-                    <div class="team-edit-row">
-                        <input type="text" id="edit_t1_${match.id}" value="${match.t1}" style="width:130px; text-align:center;">
-                        <span> vs </span>
-                        <input type="text" id="edit_t2_${match.id}" value="${match.t2}" style="width:130px; text-align:center;">
-                        <button class="btn btn-small" style="background:#555;" onclick="updateTeams(${match.id})">Átnevezés</button>
-                    </div>
-
-                    <div class="form-group" style="background:#eaf2ee; padding:10px; border-radius:5px;">
-                        <strong>Végeredmény:</strong>
-                        <input type="number" id="m_${match.id}_s1" value="${match.s1 !== null ? match.s1 : ''}">
-                        <span> : </span>
-                        <input type="number" id="m_${match.id}_s2" value="${match.s2 !== null ? match.s2 : ''}">
-                        <button class="btn btn-small" onclick="saveMatchResult(${match.id})">Mentés</button>
-                    </div>
-                    <div style="margin-top:10px;">
-            `;
+        <div id="game-content">
+            <div class="riddle-box" id="riddle-box" title="Kattints az azonnali megjelenítéshez!">
+                <span id="riddle-text"></span><span class="cursor" id="cursor"></span>
+            </div>
             
-            if (appData.players.length > 0) {
-                appData.players.forEach(player => {
-                    const tip = appData.tips[`${match.id}_${player.id}`];
-                    matchHtml += `
-                        <div class="form-group" style="justify-content:space-between; border-bottom:1px solid #ddd; padding:5px 0;">
-                            <span>${player.name} tippje:</span>
-                            <div>
-                                <input type="number" id="t_${match.id}_${player.id}_s1" value="${tip ? tip.s1 : ''}" placeholder="-">
-                                <span> : </span>
-                                <input type="number" id="t_${match.id}_${player.id}_s2" value="${tip ? tip.s2 : ''}" placeholder="-">
-                                <button class="btn btn-small" style="padding:4px 8px; font-size:0.8em;" onclick="saveTip(${match.id}, ${player.id})">Tipp mentése</button>
-                            </div>
-                        </div>
-                    `;
-                });
-            } else {
-                matchHtml += `<p style="text-align:center; color:#777;">Előbb adj hozzá játékost!</p>`;
-            }
-            matchHtml += `</div></div>`;
-            adminContainer.innerHTML += matchHtml;
+            <div class="hint-section" id="hint-section">
+                <button class="hint-btn" id="hint-btn">⚠ Adatbázis lekérdezése (-5 perc!)</button>
+                <div class="hint-text hidden" id="hint-text"></div>
+            </div>
+            
+            <input type="text" id="answer-input" placeholder="KÓD BEVITELE..." autocomplete="off">
+            <br>
+            <button class="main-btn" id="submit-btn">Kód hitelesítése</button>
+            
+            <div class="message" id="message-area"></div>
+        </div>
+
+        <div id="victory-content" class="hidden">
+            <h2 style="color: var(--text-color); font-size: 2rem;">Rendszer feltörve!</h2>
+            <p style="margin: 20px 0; font-size: 1.2rem;">Kiváló munka! Megtaláltátok a mesterjelszót, mielőtt az idő lejárt volna.</p>
+            <p style="margin-bottom: 30px; font-size: 1.2rem;">Fennmaradó idő: <span id="final-time" style="color: var(--text-color); font-weight: bold;"></span></p>
+            <button class="main-btn" id="restart-btn-win">Új küldetés indítása</button>
+        </div>
+
+        <div id="game-over-content" class="hidden">
+            <h2 style="color: var(--alert-color); font-size: 2rem;">RENDSZER LEZÁRVA</h2>
+            <p style="margin: 20px 0; font-size: 1.2rem;">Az időtök lejárt. A küldetés elbukott.</p>
+            <button class="main-btn" id="restart-btn-lose" style="background-color: var(--alert-color); color: #000;">Próbálkozás újra</button>
+        </div>
+
+        <button class="reset-btn" id="hard-reset-btn">Rendszer memória formázása</button>
+    </div>
+
+    <script>
+        // A VÁLASZOK TITKOSÍTVA VANNAK! (Base64 + fordított string)
+        // Megfejtés a diákok elől elrejtve. A JavaScript végzi a kódolást és az ellenőrzést.
+        const levels = [
+            { encodedAnswers: ["b3Jp", "b3Rsb2s=", "b3pyZXpz", "b3JpeW5lZ2Vy"], question: "Szavakkal festek világokat, de sosem fogok ecsetet. Az én világomban a papír vagy a képernyő a vászon.", hint: "Tipp: Könyveket, történeteket alkot." },
+            { encodedAnswers: ["enNlZ2Vy", "c3Vnb2xvZWhjcmE="], question: "A múltat kutatom a föld alatt. Egy ecset és egy spakli a legfőbb fegyverem, ha letűnt korok kincseit, csontjait hozom a felszínre.", hint: "Tipp: Indiana Jones is ezt a szakmát űzte." },
+            { encodedAnswers: ["enNhZGR6YWd6b2s=", "cmVrb3Ji", "c2V5Z3V6bmVw"], fragment: "T", question: "A pénz beszél, én pedig értem a nyelvét. Számok, grafikonok, részvények és tőzsdék világában navigálok.", hint: "Tipp: A gazdaság és a piac a szakterülete." },
+            { type: "morse", encodedAnswers: ["YXRvbGlw"], question: ">> HANGALAPÚ ÜZENET DEKÓDOLVA <<\n\n .--. / .. / .-.. / --- / - / .-\n\nKire utal ez a morze kód?", hint: "Tipp: Keress egy Morse ABC-t a neten! Az első betű ( .--. ) a P." },
+            { encodedAnswers: ["enNhbnJvdHlnb3ln", "YXR1ZXBhcmV0b2l6aWY="], question: "Nem vagyok orvos, de a test mozgása a kisujjamban van. Sérült izmokat, ízületeket mozgatok, hogy újra fájdalommentesen léphess pályára.", hint: "Tipp: Tornáztatja a mozgásszervi betegeket." },
+            { encodedAnswers: ["enNldGlwZQ==", "a29ucmVtemNzaXRlcGU="], question: "Épületeket álmodom meg, mielőtt egyetlen tégla is a helyére kerülne. A vonalzó, a tervezőprogram és a térlátás az én világom.", hint: "Tipp: Ő tervezi a házakat." },
+            { encodedAnswers: ["ZGV2eWd1", "b3JpYg==", "enNleWd1"], fragment: "U", question: "A tárgyalóterem a csataterem. Fegyverem nincs, de a törvénykönyv és a meggyőző érvelés a pajzsom és a kardom.", hint: "Tipp: Jogi képviselő, aki védi a vádlottat a bíróságon." },
+            { type: "binary", encodedAnswers: ["c290b2Y=", "enNlcGVreW5lZg=="], question: ">> RENDSZERNAPLÓ KIVONAT <<\nAdat: 01100110 01101111 01110100 01101111 01110011\n\nFordítsd le ezt a bináris gépi kódot betűkké!", hint: "Tipp: Keress egy 'Binary to ASCII converter'-t a neten. A 01100110 egy 'f' betű." },
+            { encodedAnswers: ["enNleWdldg==", "c3VraW1law=="], question: "Nem vagyok varázsló, de lombikokból, kémcsövekből és különböző anyagok keveréséből valami újat hozok létre.", hint: "Tipp: Laboratóriumban dolgozik, periódusos rendszert használ." },
+            { encodedAnswers: ["c29ydm90YWxsYQ=="], question: "Az én pácienseim sosem tudják elmondani, hol fáj nekik. Néha nyávognak, ugatnak, vagy épp tollaik vannak.", hint: "Tipp: Kedvenceket gyógyít." },
+            { encodedAnswers: ["c3Vnb2xvcm9ldGVt", "c2VwZWtvZGk="], fragment: "Z", question: "A földrajz számomra nem csak térkép. Égképeket vizslatok, légnyomást, frontokat és viharokat jósolok, de nem vagyok jós.", hint: "Tipp: Az időjárás előrejelzése a feladata." },
+            { type: "scramble", encodedAnswers: ["b3pvbWFyZ29ycA=="], question: "⚠️ VÍRUS A RENDSZERBEN ⚠️\nA trójai program összekeverte a billentyűzetedet!\nAz ABC megfordult! (A=Z, B=Y, C=X...)\n\nÍrd be a képernyőre a következőt: \nPROGRAMOZO", hint: "Tipp: Ne a 'P' betűt nyomd! Írd fel az ABC-t és alá fordítva. Ha 'P'-t akarsz látni, a 'K'-t kell megnyomnod! A teljes beírandó kód: KILTIZNLAL" },
+            { encodedAnswers: ["b3RpZHJvZg==", "c2NhbWxvdA=="], question: "Szövegeket ültetek át egyik formából a másikba. Híd vagyok két különböző kultúra és nyelv között, hogy a világ megértse egymást.", hint: "Tipp: Idegen nyelveket alakít át magyarra." },
+            { encodedAnswers: ["enNlbml6c25vcmtuaXpz", "enNlbml6cw=="], fragment: "F", question: "Életet adok a karaktereknek egy sötét stúdióban állva. A képernyőn sosem látsz, mégis egy rajzfilmhős az én hangomon szólal meg.", hint: "Tipp: Mikrofonba beszél a külföldi filmek alatt." },
+            { encodedAnswers: ["b3ptZWxldGFkYQ==", "c29kdXR0YWRh"], question: "Hatalmas adathalmazokból nyerem ki az igazságot. A mai kor aranya az adat, én pedig a bányász vagyok, aki megérti a mintákat.", hint: "Tipp: Statisztikákat, táblázatokat elemez." },
+            { type: "cipher", encodedAnswers: ["cm9kbmVy"], question: ">> TITKOSÍTOTT AKTA <<\nKódolt szöveg: U H Q G R U\nAlgoritmus: Caesar-kódolás (eltolás +3, tehát az 'A' betű helyett 'D' lett írva).\n\nFejtsd vissza a mesterséget!", hint: "Tipp: Ha 'U'-t látsz, lépj vissza 3 betűt az ABC-ben. Az U -> R. A H -> E." },
+            { encodedAnswers: ["b3JpZ2FzanU=", "cmVydHJvcGly", "b3Rpc29kdXQ="], fragment: "A", question: "Eseményeket, botrányokat, eltitkolt igazságokat kutatok, majd megírom, vagy a kamerába mondom a nagyvilágnak.", hint: "Tipp: Cikkeket ír és interjúkat készít." },
+            { encodedAnswers: ["c29jbmF0", "enNldmV1bXR0ZWxhYg==", "c3VmYWdyb2Vyb2s="], question: "Színpadon állok, de nem beszélek és nem énekelek. A testem mozgása, a ritmus és az izmaim feszülése mondja el a történetet.", hint: "Tipp: A zenére mozog professzionális szinten." },
+            { encodedAnswers: ["c3Vnb2xvaGNpenBz", "YXR1ZXBhcmV0", "cmV0YWloY2l6cHM="], fragment: "L", question: "A lélek és az elme útvesztőit kutatom. Ha szorongsz vagy elakadtál az életedben, én leülök veled beszélgetni.", hint: "Tipp: Mentális egészséggel foglalkozik." },
+            { encodedAnswers: ["bGFmenV0"], question: ">> VÉGSŐ ZÁR <<\nA rendszer teljes feltöréséhez szükséged van a MESTERJELSZÓRA. \n\nKeresd meg azt a 6 db kódmorzsát (betűt), amit a rendszer a korábbi (megoldott) szinteken elszórt. Olvasd össze őket a megfelelő sorrendben, és írd be a végső kódot!", hint: "Tipp: Ha nem írtad fel a betűket, használd az 'Előző' gombot, és nézd meg a már megoldott 3., 7., 11., 14., 17. és 19. szint üzeneteit!" }
+        ];
+
+        // Rendszerváltozók
+        let maxUnlockedLevel = 0;
+        let currentLevel = 0;
+        const totalLevels = levels.length;
+        const MAX_LVL_KEY = 'escape_max_v4';
+        const ENDTIME_KEY = 'escape_time_v4';
+        const HINT_KEY = 'escape_hints_v4';
+        const INTRO_KEY = 'escape_intro_v4';
+        const TIME_LIMIT_MS = 2 * 60 * 60 * 1000; 
+        
+        let timerInterval;
+        let endTime;
+        let typeOutInterval;
+        let hintsUsed = [];
+
+        // ABC megfordító szótár
+        const reverseMap = {
+            'a':'z', 'b':'y', 'c':'x', 'd':'w', 'e':'v', 'f':'u', 'g':'t', 'h':'s', 'i':'r', 'j':'q', 'k':'p', 'l':'o', 'm':'n', 'n':'m', 'o':'l', 'p':'k', 'q':'j', 'r':'i', 's':'h', 't':'g', 'u':'f', 'v':'e', 'w':'d', 'x':'c', 'y':'b', 'z':'a'
+        };
+
+        const levelDisplay = document.getElementById('level-display');
+        const timerDisplay = document.getElementById('timer-display');
+        const riddleBox = document.getElementById('riddle-box');
+        const riddleText = document.getElementById('riddle-text');
+        const cursor = document.getElementById('cursor');
+        const hintBtn = document.getElementById('hint-btn');
+        const hintText = document.getElementById('hint-text');
+        const answerInput = document.getElementById('answer-input');
+        const submitBtn = document.getElementById('submit-btn');
+        const messageArea = document.getElementById('message-area');
+        const gameContent = document.getElementById('game-content');
+        const victoryContent = document.getElementById('victory-content');
+        const gameOverContent = document.getElementById('game-over-content');
+        const container = document.getElementById('game-container');
+        const introScreen = document.getElementById('intro-screen');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const body = document.body;
+        const mainTitle = document.getElementById('main-title');
+
+        // Oldal betöltése
+        if (!localStorage.getItem(INTRO_KEY)) {
+            introScreen.classList.remove('hidden');
+            container.classList.add('hidden');
+        } else {
+            introScreen.classList.add('hidden');
+            container.classList.remove('hidden');
+            initGame();
+        }
+
+        document.getElementById('start-game-btn').addEventListener('click', () => {
+            localStorage.setItem(INTRO_KEY, 'true');
+            introScreen.classList.add('hidden');
+            container.classList.remove('hidden');
+            initGame();
         });
 
-        generateGitHubExport();
-    }
+        function initGame() {
+            maxUnlockedLevel = parseInt(localStorage.getItem(MAX_LVL_KEY)) || 0;
+            if (maxUnlockedLevel < 0 || maxUnlockedLevel > totalLevels) maxUnlockedLevel = 0;
+            currentLevel = maxUnlockedLevel; // A legmagasabb elért szintre dobja be
+            
+            if (currentLevel >= totalLevels) {
+                showVictory();
+                return;
+            }
 
-    renderApp();
-</script>
+            endTime = parseInt(localStorage.getItem(ENDTIME_KEY)) || (Date.now() + TIME_LIMIT_MS);
+            if (!localStorage.getItem(ENDTIME_KEY)) localStorage.setItem(ENDTIME_KEY, endTime);
 
+            hintsUsed = JSON.parse(localStorage.getItem(HINT_KEY)) || [];
+
+            startTimer();
+            renderLevel();
+        }
+
+        function startTimer() {
+            clearInterval(timerInterval);
+            timerInterval = setInterval(updateTimerDisplay, 1000);
+            updateTimerDisplay();
+        }
+
+        function updateTimerDisplay() {
+            const now = Date.now();
+            const timeLeft = endTime - now;
+
+            if (timeLeft <= 0) {
+                clearInterval(timerInterval);
+                timerDisplay.textContent = "00:00:00";
+                showGameOver();
+                return;
+            }
+
+            if (timeLeft < 10 * 60 * 1000) {
+                timerDisplay.classList.add('warning');
+            } else {
+                timerDisplay.classList.remove('warning');
+            }
+
+            const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+
+            timerDisplay.textContent = 
+                String(hours).padStart(2, '0') + ":" + 
+                String(minutes).padStart(2, '0') + ":" + 
+                String(seconds).padStart(2, '0');
+        }
+
+        function typeWriterEffect(text) {
+            clearInterval(typeOutInterval);
+            riddleText.textContent = "";
+            cursor.classList.remove('hidden');
+            let i = 0;
+            
+            riddleBox.onclick = () => {
+                clearInterval(typeOutInterval);
+                riddleText.textContent = text;
+                cursor.classList.add('hidden');
+                riddleBox.onclick = null;
+            };
+
+            typeOutInterval = setInterval(() => {
+                if (i < text.length) {
+                    riddleText.textContent += text.charAt(i);
+                    i++;
+                } else {
+                    clearInterval(typeOutInterval);
+                    cursor.classList.add('hidden');
+                    riddleBox.onclick = null;
+                }
+            }, 30);
+        }
+
+        function renderLevel() {
+            gameContent.classList.remove('hidden');
+            victoryContent.classList.add('hidden');
+            gameOverContent.classList.add('hidden');
+            
+            levelDisplay.textContent = `Szint: ${currentLevel + 1} / ${totalLevels}`;
+            
+            // Vírus mód UI
+            if (levels[currentLevel].type === 'scramble') {
+                body.classList.add('virus-active');
+                container.classList.add('virus-active');
+                mainTitle.textContent = "⚠ RENDSZERHIBA ⚠";
+            } else {
+                body.classList.remove('virus-active');
+                container.classList.remove('virus-active');
+                mainTitle.textContent = "Project: Szabadulás";
+            }
+
+            // Gombok megjelenítése
+            prevBtn.style.display = currentLevel > 0 ? 'inline-block' : 'none';
+            nextBtn.style.display = currentLevel < maxUnlockedLevel ? 'inline-block' : 'none';
+
+            // Tipp logika
+            if (hintsUsed.includes(currentLevel)) {
+                hintBtn.classList.add('hidden');
+                hintText.textContent = levels[currentLevel].hint;
+                hintText.classList.remove('hidden');
+            } else {
+                hintBtn.classList.remove('hidden');
+                hintText.classList.add('hidden');
+            }
+
+            typeWriterEffect(levels[currentLevel].question);
+
+            // Ha a szintet már megoldotta korábban
+            if (currentLevel < maxUnlockedLevel) {
+                answerInput.value = "MEGOLDVA";
+                answerInput.disabled = true;
+                submitBtn.disabled = true;
+                
+                let msg = "✓ Ezt a biztonsági zárat már feltörted.";
+                if (levels[currentLevel].fragment) {
+                    msg += `<br><br><span style="color:var(--hint-color); font-size:1.4rem;">[ RENDSZERÜZENET: Jegyezd meg ezt a karaktert: <strong>${levels[currentLevel].fragment}</strong> ]</span>`;
+                }
+                messageArea.innerHTML = msg;
+                messageArea.className = "message success";
+            } else {
+                answerInput.disabled = false;
+                answerInput.value = "";
+                answerInput.focus();
+                submitBtn.disabled = false;
+                messageArea.innerHTML = "";
+                messageArea.className = "message";
+            }
+        }
+
+        // Navigáció
+        prevBtn.addEventListener('click', () => { if (currentLevel > 0) { currentLevel--; renderLevel(); } });
+        nextBtn.addEventListener('click', () => { if (currentLevel < maxUnlockedLevel) { currentLevel++; renderLevel(); } });
+
+        // Tipp kérése
+        hintBtn.addEventListener('click', () => {
+            const timeLeft = endTime - Date.now();
+            if (timeLeft < 5 * 60 * 1000) {
+                showMessage("Nincs elég időd tipphez!", "error");
+                return;
+            }
+
+            if(confirm("Biztosan kérsz tippet? Ezzel 5 percet veszítesz a küldetésből!")) {
+                endTime -= 5 * 60 * 1000;
+                localStorage.setItem(ENDTIME_KEY, endTime);
+                
+                const penalty = document.createElement('div');
+                penalty.textContent = "-5 PERC";
+                penalty.className = 'time-penalty-anim';
+                container.appendChild(penalty);
+                setTimeout(() => penalty.remove(), 1500);
+
+                hintsUsed.push(currentLevel);
+                localStorage.setItem(HINT_KEY, JSON.stringify(hintsUsed));
+                
+                hintBtn.classList.add('hidden');
+                hintText.textContent = levels[currentLevel].hint;
+                hintText.classList.remove('hidden');
+                updateTimerDisplay();
+            }
+        });
+
+        // Vírus - Billentyűzet összekeverés
+        answerInput.addEventListener('keydown', function(e) {
+            if (levels[currentLevel] && levels[currentLevel].type === 'scramble' && !this.disabled) {
+                if (e.key.length === 1 && /[a-z]/i.test(e.key) && !e.ctrlKey && !e.altKey && !e.metaKey) {
+                    e.preventDefault(); 
+                    let char = e.key.toLowerCase();
+                    let mappedChar = reverseMap[char] || char;
+                    const start = this.selectionStart;
+                    const end = this.selectionEnd;
+                    this.value = this.value.substring(0, start) + mappedChar.toUpperCase() + this.value.substring(end);
+                    this.setSelectionRange(start + 1, start + 1);
+                }
+            }
+        });
+
+        // ⚠ A TITKOSÍTÁS FELOLDÁSA A JAVASCRIPTBEN ⚠
+        // A kód lecsupaszítja, megfordítja és base64-be kódolja a beírt szót, majd ezt hasonlítja össze.
+        function encodeInput(str) {
+            let normalized = str.toLowerCase().replace(/\s+/g, '').normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+            let reversed = normalized.split('').reverse().join('');
+            return btoa(reversed); // Btoa = Base64 kódolás
+        }
+
+        function checkAnswer() {
+            if (answerInput.disabled) return;
+
+            const rawInput = answerInput.value;
+            if (rawInput === "") {
+                showMessage("Üres kód! Kérlek gépelj be valamit.", "error");
+                triggerShake();
+                return;
+            }
+
+            const encodedUserInput = encodeInput(rawInput);
+            const correctEncodedAnswers = levels[currentLevel].encodedAnswers;
+
+            if (correctEncodedAnswers.includes(encodedUserInput)) {
+                let msg = "✓ Kód elfogadva. Tűzfal feltörve.";
+                if (levels[currentLevel].fragment) {
+                    msg += `<br><br><span style="color:var(--hint-color); font-size:1.4rem;">[ RENDSZERÜZENET: Jegyezd meg ezt a karaktert: <strong>${levels[currentLevel].fragment}</strong> ]</span>`;
+                }
+                
+                showMessage(msg, "success", true);
+                
+                if (currentLevel === maxUnlockedLevel) {
+                    maxUnlockedLevel++;
+                    localStorage.setItem(MAX_LVL_KEY, maxUnlockedLevel);
+                }
+                
+                submitBtn.disabled = true;
+                answerInput.disabled = true;
+                
+                setTimeout(() => {
+                    if (maxUnlockedLevel >= totalLevels) {
+                        showVictory();
+                    } else {
+                        currentLevel = maxUnlockedLevel;
+                        renderLevel();
+                    }
+                }, levels[currentLevel].fragment ? 4000 : 1500); // Több időt hagyunk az olvasásra, ha van fragment
+            } else {
+                showMessage("✗ Hozzáférés megtagadva. Hibás kód.", "error");
+                triggerShake();
+            }
+        }
+
+        function triggerShake() {
+            answerInput.classList.add('shake');
+            setTimeout(() => answerInput.classList.remove('shake'), 400);
+            answerInput.value = "";
+            answerInput.focus();
+        }
+
+        function showMessage(msg, type, isHtml = false) {
+            if(isHtml) {
+                messageArea.innerHTML = msg;
+            } else {
+                messageArea.textContent = msg;
+            }
+            messageArea.className = `message ${type}`;
+        }
+
+        function showVictory() {
+            clearInterval(timerInterval);
+            clearInterval(typeOutInterval);
+            body.classList.remove('virus-active');
+            container.classList.remove('virus-active');
+            gameContent.classList.add('hidden');
+            gameOverContent.classList.add('hidden');
+            victoryContent.classList.remove('hidden');
+            document.getElementById('final-time').textContent = timerDisplay.textContent;
+            levelDisplay.textContent = "KÜLDETÉS TELJESÍTVE";
+        }
+
+        function showGameOver() {
+            clearInterval(typeOutInterval);
+            body.classList.remove('virus-active');
+            container.classList.remove('virus-active');
+            gameContent.classList.add('hidden');
+            victoryContent.classList.add('hidden');
+            gameOverContent.classList.remove('hidden');
+            levelDisplay.textContent = "KÜLDETÉS ELBUKVA";
+        }
+
+        function resetGame() {
+            maxUnlockedLevel = 0;
+            currentLevel = 0;
+            hintsUsed = [];
+            endTime = Date.now() + TIME_LIMIT_MS;
+            
+            localStorage.setItem(MAX_LVL_KEY, 0);
+            localStorage.setItem(HINT_KEY, JSON.stringify([]));
+            localStorage.setItem(ENDTIME_KEY, endTime);
+            
+            startTimer();
+            renderLevel();
+        }
+
+        submitBtn.addEventListener('click', checkAnswer);
+        answerInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') checkAnswer(); });
+        document.getElementById('restart-btn-win').addEventListener('click', resetGame);
+        document.getElementById('restart-btn-lose').addEventListener('click', resetGame);
+        document.getElementById('hard-reset-btn').addEventListener('click', () => {
+            if(confirm("Biztosan mindent törölsz? Ezt nem lehet visszavonni!")) resetGame();
+        });
+    </script>
 </body>
 </html>
