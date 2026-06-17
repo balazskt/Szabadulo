@@ -17,230 +17,108 @@
             --virus-color: #ff0055;
         }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Courier New', Courier, monospace;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Courier New', Courier, monospace; }
 
         body {
-            background-color: var(--bg-color);
-            color: var(--text-light);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            padding: 20px;
+            background-color: var(--bg-color); color: var(--text-light);
+            display: flex; justify-content: center; align-items: center;
+            min-height: 100vh; padding: 20px;
             background-image: radial-gradient(circle at 50% 50%, #111a22 0%, #050505 100%);
             transition: background-color 0.5s;
         }
 
-        body.virus-active {
-            background-image: radial-gradient(circle at 50% 50%, #3a0000 0%, #050505 100%);
-        }
+        body.virus-active { background-image: radial-gradient(circle at 50% 50%, #3a0000 0%, #050505 100%); }
 
         .container {
-            background-color: rgba(17, 26, 34, 0.85);
-            padding: 40px;
-            border-radius: 8px;
-            box-shadow: 0 0 30px rgba(0, 255, 204, 0.15);
-            max-width: 650px;
-            width: 100%;
-            text-align: center;
-            border: 1px solid var(--btn-bg);
-            backdrop-filter: blur(5px);
-            transition: all 0.5s;
-            position: relative;
+            background-color: rgba(17, 26, 34, 0.85); padding: 40px; border-radius: 8px;
+            box-shadow: 0 0 30px rgba(0, 255, 204, 0.15); max-width: 650px; width: 100%;
+            text-align: center; border: 1px solid var(--btn-bg); backdrop-filter: blur(5px);
+            transition: all 0.5s; position: relative;
         }
 
         .container.virus-active {
-            border-color: var(--virus-color);
-            box-shadow: 0 0 30px rgba(255, 0, 85, 0.3);
+            border-color: var(--virus-color); box-shadow: 0 0 30px rgba(255, 0, 85, 0.3);
             animation: glitch-box 2s infinite;
         }
 
         @keyframes glitch-box {
-            0% { transform: translate(0) }
-            20% { transform: translate(-2px, 1px) }
-            40% { transform: translate(-1px, -1px) }
-            60% { transform: translate(2px, 1px) }
-            80% { transform: translate(1px, -1px) }
-            100% { transform: translate(0) }
+            0% { transform: translate(0) } 20% { transform: translate(-2px, 1px) }
+            40% { transform: translate(-1px, -1px) } 60% { transform: translate(2px, 1px) }
+            80% { transform: translate(1px, -1px) } 100% { transform: translate(0) }
         }
 
         h1 {
-            color: var(--text-color);
-            margin-bottom: 15px;
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            font-size: 1.8rem;
-            text-shadow: 0 0 10px rgba(0,255,204,0.3);
+            color: var(--text-color); margin-bottom: 15px; text-transform: uppercase;
+            letter-spacing: 3px; font-size: 1.8rem; text-shadow: 0 0 10px rgba(0,255,204,0.3);
         }
         
         .virus-active h1 { color: var(--virus-color); text-shadow: 0 0 10px rgba(255,0,85,0.5); }
 
         .header-info {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 25px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid rgba(0, 143, 122, 0.5);
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 25px; padding-bottom: 15px; border-bottom: 1px solid rgba(0, 143, 122, 0.5);
         }
 
         .level-indicator { font-size: 1.2rem; font-weight: bold; }
 
         .timer {
-            font-size: 1.5rem;
-            color: var(--text-color);
-            font-weight: bold;
-            background: #000;
-            padding: 5px 15px;
-            border-radius: 4px;
-            border: 1px solid var(--text-color);
-            letter-spacing: 2px;
-            transition: color 0.3s, border-color 0.3s;
+            font-size: 1.5rem; color: var(--text-color); font-weight: bold; background: #000;
+            padding: 5px 15px; border-radius: 4px; border: 1px solid var(--text-color);
+            letter-spacing: 2px; transition: color 0.3s, border-color 0.3s;
         }
 
-        .timer.warning {
-            color: var(--alert-color);
-            border-color: var(--alert-color);
-            animation: pulse 1s infinite alternate;
-        }
+        .timer.warning { color: var(--alert-color); border-color: var(--alert-color); animation: pulse 1s infinite alternate; }
 
-        @keyframes pulse {
-            from { box-shadow: 0 0 5px var(--alert-color); }
-            to { box-shadow: 0 0 20px var(--alert-color); }
-        }
+        @keyframes pulse { from { box-shadow: 0 0 5px var(--alert-color); } to { box-shadow: 0 0 20px var(--alert-color); } }
 
-        .nav-buttons {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 15px;
-            min-height: 35px;
-        }
+        .nav-buttons { display: flex; justify-content: space-between; margin-bottom: 15px; min-height: 35px; }
 
         .nav-btn {
-            background: transparent;
-            color: var(--text-light);
-            border: 1px solid var(--text-light);
-            padding: 5px 15px;
-            border-radius: 3px;
-            cursor: pointer;
-            transition: 0.3s;
+            background: transparent; color: var(--text-light); border: 1px solid var(--text-light);
+            padding: 5px 15px; border-radius: 3px; cursor: pointer; transition: 0.3s;
         }
         .nav-btn:hover { background: rgba(255,255,255,0.1); color: #fff; }
 
         .riddle-box {
-            background-color: #000;
-            padding: 25px;
-            border-radius: 5px;
-            margin-bottom: 20px;
-            font-size: 1.2rem;
-            line-height: 1.6;
-            border-left: 5px solid var(--text-color);
-            text-align: left;
-            min-height: 120px;
-            cursor: pointer;
-            position: relative;
-            white-space: pre-wrap; 
+            background-color: #000; padding: 25px; border-radius: 5px; margin-bottom: 20px;
+            font-size: 1.2rem; line-height: 1.6; border-left: 5px solid var(--text-color);
+            text-align: left; min-height: 120px; cursor: pointer; position: relative; white-space: pre-wrap; 
         }
 
         .virus-active .riddle-box { border-left-color: var(--virus-color); color: #ff9999; }
 
         .cursor {
-            display: inline-block;
-            width: 8px;
-            height: 18px;
-            background-color: var(--text-color);
-            animation: blink 1s step-end infinite;
-            vertical-align: text-bottom;
+            display: inline-block; width: 8px; height: 18px; background-color: var(--text-color);
+            animation: blink 1s step-end infinite; vertical-align: text-bottom;
         }
         
         .virus-active .cursor { background-color: var(--virus-color); }
-
         @keyframes blink { 50% { opacity: 0; } }
 
         .hint-section { margin-bottom: 20px; min-height: 40px; }
-
         .hint-btn {
-            background-color: transparent;
-            color: var(--hint-color);
-            border: 1px dashed var(--hint-color);
-            padding: 8px 15px;
-            font-size: 0.9rem;
-            border-radius: 3px;
-            cursor: pointer;
-            transition: all 0.3s;
+            background-color: transparent; color: var(--hint-color); border: 1px dashed var(--hint-color);
+            padding: 8px 15px; font-size: 0.9rem; border-radius: 3px; cursor: pointer; transition: all 0.3s;
         }
-
-        .hint-btn:hover {
-            background-color: rgba(255, 170, 0, 0.1);
-            box-shadow: 0 0 10px rgba(255, 170, 0, 0.3);
-        }
-
-        .hint-text {
-            color: var(--hint-color);
-            font-style: italic;
-            font-size: 1rem;
-            padding: 10px;
-            background: rgba(255, 170, 0, 0.05);
-            border-radius: 5px;
-        }
+        .hint-btn:hover { background-color: rgba(255, 170, 0, 0.1); box-shadow: 0 0 10px rgba(255, 170, 0, 0.3); }
+        .hint-text { color: var(--hint-color); font-style: italic; font-size: 1rem; padding: 10px; background: rgba(255, 170, 0, 0.05); border-radius: 5px; }
 
         input[type="text"] {
-            width: 80%;
-            padding: 15px;
-            font-size: 1.2rem;
-            border: 2px solid var(--btn-bg);
-            border-radius: 5px;
-            margin-bottom: 20px;
-            background-color: #000;
-            color: var(--text-color);
-            outline: none;
-            text-align: center;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            font-weight: bold;
+            width: 80%; padding: 15px; font-size: 1.2rem; border: 2px solid var(--btn-bg);
+            border-radius: 5px; margin-bottom: 20px; background-color: #000; color: var(--text-color);
+            outline: none; text-align: center; text-transform: uppercase; letter-spacing: 2px; font-weight: bold;
         }
-
-        input[type="text"]:disabled {
-            border-color: #333;
-            color: #555;
-            background-color: #0a0a0a;
-            cursor: not-allowed;
-        }
-
-        .virus-active input[type="text"] {
-            border-color: var(--virus-color);
-            color: var(--virus-color);
-        }
-
+        input[type="text"]:disabled { border-color: #333; color: #555; background-color: #0a0a0a; cursor: not-allowed; }
+        .virus-active input[type="text"] { border-color: var(--virus-color); color: var(--virus-color); }
         input[type="text"]:focus { box-shadow: 0 0 15px var(--btn-bg); }
         .virus-active input[type="text"]:focus { box-shadow: 0 0 15px var(--virus-color); }
 
         .main-btn {
-            background-color: var(--btn-bg);
-            color: #000;
-            border: none;
-            padding: 15px 35px;
-            font-size: 1.1rem;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-transform: uppercase;
-            font-weight: bold;
+            background-color: var(--btn-bg); color: #000; border: none; padding: 15px 35px;
+            font-size: 1.1rem; border-radius: 5px; cursor: pointer; transition: all 0.3s ease;
+            text-transform: uppercase; font-weight: bold;
         }
-        
-        .main-btn:disabled {
-            background-color: #333;
-            color: #666;
-            cursor: not-allowed;
-            box-shadow: none !important;
-            transform: none !important;
-        }
-
+        .main-btn:disabled { background-color: #333; color: #666; cursor: not-allowed; box-shadow: none !important; transform: none !important; }
         .virus-active .main-btn:not(:disabled) { background-color: var(--virus-color); color: #fff; }
         .main-btn:not(:disabled):hover { transform: translateY(-2px); box-shadow: 0 0 15px var(--btn-hover); }
         .virus-active .main-btn:not(:disabled):hover { box-shadow: 0 0 15px var(--virus-color); }
@@ -248,64 +126,23 @@
         .message { margin-top: 20px; min-height: 24px; font-weight: bold; font-size: 1.1rem; line-height: 1.5; }
         .error { color: var(--alert-color); }
         .success { color: var(--text-color); }
-
         .hidden { display: none !important; }
 
-        .reset-btn {
-            background-color: transparent;
-            color: #555;
-            font-size: 0.8rem;
-            margin-top: 40px;
-            padding: 5px;
-            border: none;
-            cursor: pointer;
-            text-decoration: underline;
-        }
+        .reset-btn { background-color: transparent; color: #555; font-size: 0.8rem; margin-top: 40px; padding: 5px; border: none; cursor: pointer; text-decoration: underline; }
         .reset-btn:hover { color: #888; }
 
         .shake { animation: shake 0.4s; }
-        @keyframes shake {
-            0% { transform: translateX(0); }
-            25% { transform: translateX(-10px); }
-            50% { transform: translateX(10px); }
-            75% { transform: translateX(-10px); }
-            100% { transform: translateX(0); }
-        }
+        @keyframes shake { 0% { transform: translateX(0); } 25% { transform: translateX(-10px); } 50% { transform: translateX(10px); } 75% { transform: translateX(-10px); } 100% { transform: translateX(0); } }
         
         .time-penalty-anim {
-            position: absolute;
-            color: var(--alert-color);
-            font-size: 2rem;
-            font-weight: bold;
-            top: 40px;
-            right: 40px;
-            animation: floatUp 1.5s forwards;
-            pointer-events: none;
-            z-index: 100;
+            position: absolute; color: var(--alert-color); font-size: 2rem; font-weight: bold;
+            top: 40px; right: 40px; animation: floatUp 1.5s forwards; pointer-events: none; z-index: 100;
         }
+        @keyframes floatUp { 0% { opacity: 1; transform: translateY(0); } 100% { opacity: 0; transform: translateY(-50px); } }
 
-        @keyframes floatUp {
-            0% { opacity: 1; transform: translateY(0); }
-            100% { opacity: 0; transform: translateY(-50px); }
-        }
-
-        /* Intro Screen Styles */
-        #intro-screen {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-        }
+        #intro-screen { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
         #intro-screen h1 { color: var(--text-color); font-size: 2.5rem; margin-bottom: 20px; }
-        .warning-box {
-            border: 2px solid var(--alert-color);
-            background-color: rgba(255, 59, 59, 0.1);
-            padding: 20px;
-            border-radius: 8px;
-            margin: 20px 0;
-            color: #fff;
-        }
+        .warning-box { border: 2px solid var(--alert-color); background-color: rgba(255, 59, 59, 0.1); padding: 20px; border-radius: 8px; margin: 20px 0; color: #fff; }
         .warning-box h2 { color: var(--alert-color); margin-bottom: 10px; }
     </style>
 </head>
@@ -314,50 +151,43 @@
     <div class="container" id="intro-screen">
         <h1>Rendszer Inicializálása</h1>
         <p style="font-size: 1.2rem; color: var(--text-light); max-width: 500px; margin-bottom: 10px;">
-            Üdvözlünk a Project: Szabadulás operációs rendszerében. A bejutáshoz több biztonsági szintet kell feltörnöd.
+            Üdvözlünk a Project: Szabadulás 40 szintes rendszerében. 
         </p>
         <div class="warning-box">
-            <h2>⚠️ FIGYELEM: KÉSZÜLJ FEL! ⚠️</h2>
-            <p>Mielőtt elindítanád a rendszert, <strong>készíts elő papírt és ceruzát!</strong></p>
-            <p style="margin-top: 10px; font-size: 0.95rem;">Bizonyos szintek feltörése után a rendszer <strong>titkos kódmorzsákat (betűket)</strong> fog kiadni. Ezeket gondosan jegyezd fel, mert az utolsó, 20. szinten szükséged lesz rájuk a mesterjelszóhoz!</p>
+            <h2>⚠️ KÉSZÍTS PAPÍRT ÉS CERUZÁT! ⚠️</h2>
+            <p>Bizonyos szintek feltörése után a rendszer <strong>titkos kódmorzsákat (betűket)</strong> fog kiadni, összesen 10 darabot.</p>
+            <p style="margin-top: 10px; font-size: 0.95rem;">Ezeket gondosan jegyezd fel! A legutolsó szinten ezeket a betűket kell <strong>összekeverned</strong>, hogy megkapd az egyetlen értelmes szót (a Mesterjelszót).</p>
         </div>
-        <p style="margin-bottom: 30px; font-size: 0.9rem; color: #888;">Tipp: Ha elfelejtettél felírni valamit, a "◀ Előző" gombbal bármikor visszamehetsz a már megoldott szintekre megnézni az üzeneteket.</p>
         <button class="main-btn" id="start-game-btn" style="font-size: 1.3rem;">Értettem, Rendszer Indítása</button>
     </div>
 
     <div class="container hidden" id="game-container">
         <h1 id="main-title">Project: Szabadulás</h1>
-        
         <div class="header-info" id="header-info">
-            <div class="level-indicator" id="level-display">Szint: 1 / 20</div>
+            <div class="level-indicator" id="level-display">Szint: 1 / 40</div>
             <div class="timer" id="timer-display">02:00:00</div>
         </div>
-
         <div class="nav-buttons">
             <button class="nav-btn" id="prev-btn" style="display: none;">◀ Előző</button>
             <button class="nav-btn" id="next-btn" style="display: none;">Következő ▶</button>
         </div>
-        
         <div id="game-content">
             <div class="riddle-box" id="riddle-box" title="Kattints az azonnali megjelenítéshez!">
                 <span id="riddle-text"></span><span class="cursor" id="cursor"></span>
             </div>
-            
             <div class="hint-section" id="hint-section">
                 <button class="hint-btn" id="hint-btn">⚠ Adatbázis lekérdezése (-5 perc!)</button>
                 <div class="hint-text hidden" id="hint-text"></div>
             </div>
-            
             <input type="text" id="answer-input" placeholder="KÓD BEVITELE..." autocomplete="off">
             <br>
             <button class="main-btn" id="submit-btn">Kód hitelesítése</button>
-            
             <div class="message" id="message-area"></div>
         </div>
 
         <div id="victory-content" class="hidden">
             <h2 style="color: var(--text-color); font-size: 2rem;">Rendszer feltörve!</h2>
-            <p style="margin: 20px 0; font-size: 1.2rem;">Kiváló munka! Megtaláltátok a mesterjelszót, mielőtt az idő lejárt volna.</p>
+            <p style="margin: 20px 0; font-size: 1.2rem;">Kiváló munka! Kijutottatok mind a 40 szintből.</p>
             <p style="margin-bottom: 30px; font-size: 1.2rem;">Fennmaradó idő: <span id="final-time" style="color: var(--text-color); font-weight: bold;"></span></p>
             <button class="main-btn" id="restart-btn-win">Új küldetés indítása</button>
         </div>
@@ -367,383 +197,185 @@
             <p style="margin: 20px 0; font-size: 1.2rem;">Az időtök lejárt. A küldetés elbukott.</p>
             <button class="main-btn" id="restart-btn-lose" style="background-color: var(--alert-color); color: #000;">Próbálkozás újra</button>
         </div>
-
         <button class="reset-btn" id="hard-reset-btn">Rendszer memória formázása</button>
     </div>
 
     <script>
-        // A VÁLASZOK TITKOSÍTVA VANNAK! (Base64 + fordított string)
-        // Megfejtés a diákok elől elrejtve. A JavaScript végzi a kódolást és az ellenőrzést.
+        // 40 Szint: Kódolva Base64 + Reverse Stringgel.
         const levels = [
-            { encodedAnswers: ["b3Jp", "b3Rsb2s=", "b3pyZXpz", "b3JpeW5lZ2Vy"], question: "Szavakkal festek világokat, de sosem fogok ecsetet. Az én világomban a papír vagy a képernyő a vászon.", hint: "Tipp: Könyveket, történeteket alkot." },
-            { encodedAnswers: ["enNlZ2Vy", "c3Vnb2xvZWhjcmE="], question: "A múltat kutatom a föld alatt. Egy ecset és egy spakli a legfőbb fegyverem, ha letűnt korok kincseit, csontjait hozom a felszínre.", hint: "Tipp: Indiana Jones is ezt a szakmát űzte." },
-            { encodedAnswers: ["enNhZGR6YWd6b2s=", "cmVrb3Ji", "c2V5Z3V6bmVw"], fragment: "T", question: "A pénz beszél, én pedig értem a nyelvét. Számok, grafikonok, részvények és tőzsdék világában navigálok.", hint: "Tipp: A gazdaság és a piac a szakterülete." },
-            { type: "morse", encodedAnswers: ["YXRvbGlw"], question: ">> HANGALAPÚ ÜZENET DEKÓDOLVA <<\n\n .--. / .. / .-.. / --- / - / .-\n\nKire utal ez a morze kód?", hint: "Tipp: Keress egy Morse ABC-t a neten! Az első betű ( .--. ) a P." },
-            { encodedAnswers: ["enNhbnJvdHlnb3ln", "YXR1ZXBhcmV0b2l6aWY="], question: "Nem vagyok orvos, de a test mozgása a kisujjamban van. Sérült izmokat, ízületeket mozgatok, hogy újra fájdalommentesen léphess pályára.", hint: "Tipp: Tornáztatja a mozgásszervi betegeket." },
-            { encodedAnswers: ["enNldGlwZQ==", "a29ucmVtemNzaXRlcGU="], question: "Épületeket álmodom meg, mielőtt egyetlen tégla is a helyére kerülne. A vonalzó, a tervezőprogram és a térlátás az én világom.", hint: "Tipp: Ő tervezi a házakat." },
-            { encodedAnswers: ["ZGV2eWd1", "b3JpYg==", "enNleWd1"], fragment: "U", question: "A tárgyalóterem a csataterem. Fegyverem nincs, de a törvénykönyv és a meggyőző érvelés a pajzsom és a kardom.", hint: "Tipp: Jogi képviselő, aki védi a vádlottat a bíróságon." },
-            { type: "binary", encodedAnswers: ["c290b2Y=", "enNlcGVreW5lZg=="], question: ">> RENDSZERNAPLÓ KIVONAT <<\nAdat: 01100110 01101111 01110100 01101111 01110011\n\nFordítsd le ezt a bináris gépi kódot betűkké!", hint: "Tipp: Keress egy 'Binary to ASCII converter'-t a neten. A 01100110 egy 'f' betű." },
-            { encodedAnswers: ["enNleWdldg==", "c3VraW1law=="], question: "Nem vagyok varázsló, de lombikokból, kémcsövekből és különböző anyagok keveréséből valami újat hozok létre.", hint: "Tipp: Laboratóriumban dolgozik, periódusos rendszert használ." },
-            { encodedAnswers: ["c29ydm90YWxsYQ=="], question: "Az én pácienseim sosem tudják elmondani, hol fáj nekik. Néha nyávognak, ugatnak, vagy épp tollaik vannak.", hint: "Tipp: Kedvenceket gyógyít." },
-            { encodedAnswers: ["c3Vnb2xvcm9ldGVt", "c2VwZWtvZGk="], fragment: "Z", question: "A földrajz számomra nem csak térkép. Égképeket vizslatok, légnyomást, frontokat és viharokat jósolok, de nem vagyok jós.", hint: "Tipp: Az időjárás előrejelzése a feladata." },
-            { type: "scramble", encodedAnswers: ["b3pvbWFyZ29ycA=="], question: "⚠️ VÍRUS A RENDSZERBEN ⚠️\nA trójai program összekeverte a billentyűzetedet!\nAz ABC megfordult! (A=Z, B=Y, C=X...)\n\nÍrd be a képernyőre a következőt: \nPROGRAMOZO", hint: "Tipp: Ne a 'P' betűt nyomd! Írd fel az ABC-t és alá fordítva. Ha 'P'-t akarsz látni, a 'K'-t kell megnyomnod! A teljes beírandó kód: KILTIZNLAL" },
-            { encodedAnswers: ["b3RpZHJvZg==", "c2NhbWxvdA=="], question: "Szövegeket ültetek át egyik formából a másikba. Híd vagyok két különböző kultúra és nyelv között, hogy a világ megértse egymást.", hint: "Tipp: Idegen nyelveket alakít át magyarra." },
-            { encodedAnswers: ["enNlbml6c25vcmtuaXpz", "enNlbml6cw=="], fragment: "F", question: "Életet adok a karaktereknek egy sötét stúdióban állva. A képernyőn sosem látsz, mégis egy rajzfilmhős az én hangomon szólal meg.", hint: "Tipp: Mikrofonba beszél a külföldi filmek alatt." },
-            { encodedAnswers: ["b3ptZWxldGFkYQ==", "c29kdXR0YWRh"], question: "Hatalmas adathalmazokból nyerem ki az igazságot. A mai kor aranya az adat, én pedig a bányász vagyok, aki megérti a mintákat.", hint: "Tipp: Statisztikákat, táblázatokat elemez." },
-            { type: "cipher", encodedAnswers: ["cm9kbmVy"], question: ">> TITKOSÍTOTT AKTA <<\nKódolt szöveg: U H Q G R U\nAlgoritmus: Caesar-kódolás (eltolás +3, tehát az 'A' betű helyett 'D' lett írva).\n\nFejtsd vissza a mesterséget!", hint: "Tipp: Ha 'U'-t látsz, lépj vissza 3 betűt az ABC-ben. Az U -> R. A H -> E." },
-            { encodedAnswers: ["b3JpZ2FzanU=", "cmVydHJvcGly", "b3Rpc29kdXQ="], fragment: "A", question: "Eseményeket, botrányokat, eltitkolt igazságokat kutatok, majd megírom, vagy a kamerába mondom a nagyvilágnak.", hint: "Tipp: Cikkeket ír és interjúkat készít." },
-            { encodedAnswers: ["c29jbmF0", "enNldmV1bXR0ZWxhYg==", "c3VmYWdyb2Vyb2s="], question: "Színpadon állok, de nem beszélek és nem énekelek. A testem mozgása, a ritmus és az izmaim feszülése mondja el a történetet.", hint: "Tipp: A zenére mozog professzionális szinten." },
-            { encodedAnswers: ["c3Vnb2xvaGNpenBz", "YXR1ZXBhcmV0", "cmV0YWloY2l6cHM="], fragment: "L", question: "A lélek és az elme útvesztőit kutatom. Ha szorongsz vagy elakadtál az életedben, én leülök veled beszélgetni.", hint: "Tipp: Mentális egészséggel foglalkozik." },
-            { encodedAnswers: ["bGFmenV0"], question: ">> VÉGSŐ ZÁR <<\nA rendszer teljes feltöréséhez szükséged van a MESTERJELSZÓRA. \n\nKeresd meg azt a 6 db kódmorzsát (betűt), amit a rendszer a korábbi (megoldott) szinteken elszórt. Olvasd össze őket a megfelelő sorrendben, és írd be a végső kódot!", hint: "Tipp: Ha nem írtad fel a betűket, használd az 'Előző' gombot, és nézd meg a már megoldott 3., 7., 11., 14., 17. és 19. szint üzeneteit!" }
+            { encodedAnswers: ["b3Jp", "b3Rsb2s="], question: "Szavakkal festek világokat, de sosem fogok ecsetet. Az én világomban a papír vagy a képernyő a vászon.", hint: "Tipp: Könyveket alkot." },
+            { encodedAnswers: ["enNlZ2Vy"], question: "A múltat kutatom a föld alatt. Egy ecset és egy spakli a legfőbb fegyverem.", hint: "Tipp: Indiana Jones is ezt a szakmát űzte." },
+            { encodedAnswers: ["enNhZHphZ3pvaw=="], fragment: "A", question: "A pénz beszél, én pedig értem a nyelvét. Számok, grafikonok, tőzsdék világában navigálok.", hint: "Tipp: A gazdaság a szakterülete." },
+            { type: "cipher", encodedAnswers: ["YXRvbGlw"], question: ">> HANGALAPÚ ÜZENET DEKÓDOLVA <<\n\n .--. / .. / .-.. / --- / - / .-\n\nFejtsd meg a morze kódot!", hint: "Tipp: Keress egy Morse ABC-t a neten! Az első betű a P." },
+            { encodedAnswers: ["enNhbnRyb3R5Z295Zw=="], question: "Nem vagyok orvos, de a test mozgása a kisujjamban van. Sérült izmokat mozgatok.", hint: "Tipp: Tornáztatja a betegeket." },
+            { encodedAnswers: ["enNldGlwZQ=="], question: "Épületeket álmodom meg, mielőtt egyetlen tégla is a helyére kerülne.", hint: "Tipp: Ő tervezi a házakat." },
+            { encodedAnswers: ["ZGV2eWd1"], fragment: "R", question: "A tárgyalóterem a csataterem. Fegyverem a törvénykönyv és a meggyőző érvelés.", hint: "Tipp: Védi a vádlottat a bíróságon." },
+            { type: "cipher", encodedAnswers: ["c290b2Y="], question: ">> BINÁRIS ADAT <<\n01100110 01101111 01110100 01101111 01110011\n\nFordítsd le ezt a gépi kódot betűkké!", hint: "Tipp: Keress egy 'Binary to Text' konvertert. A 01100110 egy 'f' betű." },
+            { encodedAnswers: ["enNleWdldg=="], question: "Lombikokból, kémcsövekből és különböző anyagok keveréséből valami újat hozok létre.", hint: "Tipp: Laborban dolgozik." },
+            { encodedAnswers: ["c292cm90YWxsYQ=="], question: "Az én pácienseim sosem tudják elmondani, hol fáj nekik. Néha nyávognak vagy ugatnak.", hint: "Tipp: Kedvenceket gyógyít." },
+            { encodedAnswers: ["c3Vnb2xvcm9ldGVt"], fragment: "A", question: "Égképeket vizslatok, légnyomást, frontokat és viharokat jósolok, de nem vagyok jós.", hint: "Tipp: Az időjárás előrejelzése a feladata." },
+            { type: "scramble", encodedAnswers: ["b3pvbWFyZ29ycA=="], question: "⚠️ VÍRUS A RENDSZERBEN ⚠️\nA trójai program összekeverte a billentyűzeted!\nAz ABC megfordult! (A=Z, B=Y, C=X...)\n\nÍrd be: PROGRAMOZO", hint: "Tipp: Írd fel az ABC-t és alá fordítva. Ha 'P'-t akarsz látni, a 'K'-t kell megnyomnod!" },
+            { encodedAnswers: ["b3RpZHJvZg=="], question: "Szövegeket ültetek át egyik formából a másikba. Híd vagyok két nyelv között.", hint: "Tipp: Idegen nyelvről fordít." },
+            { encodedAnswers: ["enNlbml6c25vcmtuaXpz"], question: "A képernyőn sosem látsz, mégis egy híres hollywoodi sztár az én hangomon szólal meg.", hint: "Tipp: Mikrofonba beszél a filmek alatt." },
+            { encodedAnswers: ["b3ptZWxldGFkYQ=="], fragment: "N", question: "Hatalmas adathalmazokból nyerem ki az igazságot. Én vagyok az a bányász, aki megérti a mintákat.", hint: "Tipp: Statisztikákat elemez." },
+            { type: "cipher", encodedAnswers: ["cm9kbmVy"], question: ">> CAESAR KÓDOLÁS <<\nTitkosított: U H Q G R U\nAlgoritmus: Caesar (+3 eltolás)\n\nFejtsd vissza a szót!", hint: "Tipp: Lépj vissza 3 betűt az ABC-ben. Az U -> R." },
+            { encodedAnswers: ["b3JpZ2FzanU="], question: "Botrányokat, eltitkolt igazságokat kutatok, majd megírom, vagy a kamerába mondom.", hint: "Tipp: Cikkeket ír és interjúkat készít." },
+            { encodedAnswers: ["c29jbmF0"], question: "Színpadon állok, de nem beszélek. A testem mozgása, a ritmus mondja el a történetet.", hint: "Tipp: A zenére mozog." },
+            { encodedAnswers: ["c3Vnb2xvaGNpenNw"], fragment: "Y", question: "A lélek és az elme útvesztőit kutatom. Ha szorongsz, én leülök veled beszélgetni.", hint: "Tipp: Mentális egészséggel foglalkozik." },
+            { encodedAnswers: ["YWR6YWdzcmV6ZG5lcg=="], question: "Szervereket kötök össze, hálózatokat védek a hackerektől.", hint: "Tipp: Ő tartja karban a gépeket az infó teremben." },
+            { type: "cipher", encodedAnswers: ["a2Vw"], question: ">> MEMÓRIA DUMP <<\nHexadecimális kód: 70 65 6b\n\nFejtsd vissza a mesterséget (ASCII)!", hint: "Tipp: Használj 'Hex to Text' konvertert a neten." },
+            { encodedAnswers: ["c29sYXR6c2E="], question: "Fából varázsolok bútort a szobádba, gyalum és fűrészem a legjobb barátom.", hint: "Tipp: Fával dolgozik." },
+            { encodedAnswers: ["b2JhenM="], fragment: "K", question: "Tűvel, cérnával bánok mesterien, méretre készítem a ruhát.", hint: "Tipp: Ruhákat varr." },
+            { type: "cipher", encodedAnswers: ["c2Nhdm9r"], question: ">> SZÁMKÓD <<\nAlgoritmus: A=1, B=2, C=3...\nKód: 11 - 15 - 22 - 1 - 3 - 19", hint: "Tipp: A 11. betű a K. A 15. az O." },
+            { encodedAnswers: ["enNlcGlj"], question: "Ha kilyukadt a talpad, vagy letört a sarkad, én megjavítom, hogy újra járhass.", hint: "Tipp: Cipőket javít." },
+            { encodedAnswers: ["c2FrZXphZg=="], question: "Agyagot korongozok, kemencében égetek, szép mázas korsót készítek.", hint: "Tipp: Agyaggal dolgozik." },
+            { encodedAnswers: ["c2Fybw=="], fragment: "U", question: "Időt mérek apró fogaskerekekkel, nagyító a szememen.", hint: "Tipp: Ketyegő szerkezeteket javít." },
+            { type: "cipher", encodedAnswers: ["enNldHJlaw=="], question: ">> ATBASH TITKOSÍTÁS <<\nAlgoritmus: Atbash (Angol ABC fordítva: A=Z, B=Y, C=X)\nKód: P V I G V H A", hint: "Tipp: Az angol ABC-ben a P=K, a V=E." },
+            { encodedAnswers: ["c2Nha2F6cw=="], question: "Fűszereket keverek, üstben főzöm az ebédet, ínycsiklandó az illat körülöttem.", hint: "Tipp: Ételeket készít." },
+            { encodedAnswers: ["cmFuYXQ="], question: "Krétával írok a táblára, betűket, számokat és sok újat mutatok a padban ülőknek.", hint: "Tipp: Az iskolában dolgozik." },
+            { encodedAnswers: ["b3Rsb3p1dA=="], fragment: "L", question: "Szirénázva érkezem piros autóval, vizet fecskendezek.", hint: "Tipp: Lángokat olt." },
+            { type: "cipher", encodedAnswers: ["enNhcmRvZg=="], question: ">> ANOMÁLIA <<\nZ S Á R D O F", hint: "Tipp: Olvasd visszafelé!" },
+            { encodedAnswers: ["b3RzZWY="], question: "Vászonra viszem a színeket, ecsettel alkotok tájat, portrét.", hint: "Tipp: Ecsettel dolgozik." },
+            { encodedAnswers: ["enNlbml6cw=="], question: "Más bőrébe bújok, verset mondok és a közönség tapsol nekem.", hint: "Tipp: Színházban játszik." },
+            { encodedAnswers: ["enNhZ2FsbGlzYw=="], fragment: "C", question: "Hatalmas távcsővel fürkészem az éjszakai eget, bolygókat keresek.", hint: "Tipp: Az űrt kutatja." },
+            { encodedAnswers: ["enNhbGFo"], question: "Hálót vetek a vízbe, hajnalban indulok csónakommal a tóra.", hint: "Tipp: Vizből fogja ki az ételt." },
+            { type: "cipher", encodedAnswers: ["YXR1YW5vcnR6c2E="], question: ">> RÉGI T9 MOBILTELEFON KÓD <<\nKód: 2 - 7777 - 9999 - 8 - 777 - 666 - 66 - 2 - 88 - 8 - 2\n(Megj: 2=ABC, 3=DEF...)", hint: "Tipp: Egy régi mobilon ha egyszer nyomod a 2-est, az 'A'. Ha négyszer a 7-est, az 'S'." },
+            { encodedAnswers: ["dml0a2V0ZWQ="], question: "Nagyítóval járom a tetthelyet, ujjlenyomatokat keresek a bűnös után kutatva.", hint: "Tipp: Nyomozó." },
+            { encodedAnswers: ["c290bmVt"], fragment: "S", question: "Sárga autóval, szirénázva rohanok, ha baj van és életet kell menteni.", hint: "Tipp: Betegeket visz a kórházba." },
+            { encodedAnswers: ["c2NsdWt5bmFyYQ=="], question: ">> VÉGSŐ ZÁR: ANAGRAMMA <<\n\nA rendszer korábban 10 db betűt adott neked.\nKeresd vissza őket (ha nem írtad fel, használd az 'Előző' gombot).\nRakd a 10 betűt a helyes sorrendbe, hogy EGYETLEN ÉRTELMES 10 BETŰS SZÓT kapj!", hint: "Tipp: A betűk: A, R, A, N, Y, K, U, L, C, S. Keress egy szót (egy tárgyat), amivel a mesékben a legértékesebb zárakat szokták kinyitni!" }
         ];
 
-        // Rendszerváltozók
-        let maxUnlockedLevel = 0;
-        let currentLevel = 0;
+        let maxUnlockedLevel = parseInt(localStorage.getItem('escape_max_v6')) || 0;
+        let currentLevel = maxUnlockedLevel > 39 ? 39 : maxUnlockedLevel;
         const totalLevels = levels.length;
-        const MAX_LVL_KEY = 'escape_max_v4';
-        const ENDTIME_KEY = 'escape_time_v4';
-        const HINT_KEY = 'escape_hints_v4';
-        const INTRO_KEY = 'escape_intro_v4';
         const TIME_LIMIT_MS = 2 * 60 * 60 * 1000; 
         
-        let timerInterval;
-        let endTime;
-        let typeOutInterval;
-        let hintsUsed = [];
+        let timerInterval, endTime, typeOutInterval;
+        let hintsUsed = JSON.parse(localStorage.getItem('escape_hints_v6')) || [];
 
-        // ABC megfordító szótár
-        const reverseMap = {
-            'a':'z', 'b':'y', 'c':'x', 'd':'w', 'e':'v', 'f':'u', 'g':'t', 'h':'s', 'i':'r', 'j':'q', 'k':'p', 'l':'o', 'm':'n', 'n':'m', 'o':'l', 'p':'k', 'q':'j', 'r':'i', 's':'h', 't':'g', 'u':'f', 'v':'e', 'w':'d', 'x':'c', 'y':'b', 'z':'a'
+        const reverseMap = { 'a':'z', 'b':'y', 'c':'x', 'd':'w', 'e':'v', 'f':'u', 'g':'t', 'h':'s', 'i':'r', 'j':'q', 'k':'p', 'l':'o', 'm':'n', 'n':'m', 'o':'l', 'p':'k', 'q':'j', 'r':'i', 's':'h', 't':'g', 'u':'f', 'v':'e', 'w':'d', 'x':'c', 'y':'b', 'z':'a' };
+
+        const ui = {
+            levelDisp: document.getElementById('level-display'), timerDisp: document.getElementById('timer-display'),
+            riddleBox: document.getElementById('riddle-box'), riddleText: document.getElementById('riddle-text'),
+            cursor: document.getElementById('cursor'), hintBtn: document.getElementById('hint-btn'),
+            hintText: document.getElementById('hint-text'), answerIn: document.getElementById('answer-input'),
+            submitBtn: document.getElementById('submit-btn'), msgArea: document.getElementById('message-area'),
+            gameCont: document.getElementById('game-content'), vicCont: document.getElementById('victory-content'),
+            overCont: document.getElementById('game-over-content'), container: document.getElementById('game-container'),
+            introScr: document.getElementById('intro-screen'), prevBtn: document.getElementById('prev-btn'),
+            nextBtn: document.getElementById('next-btn'), body: document.body, title: document.getElementById('main-title')
         };
 
-        const levelDisplay = document.getElementById('level-display');
-        const timerDisplay = document.getElementById('timer-display');
-        const riddleBox = document.getElementById('riddle-box');
-        const riddleText = document.getElementById('riddle-text');
-        const cursor = document.getElementById('cursor');
-        const hintBtn = document.getElementById('hint-btn');
-        const hintText = document.getElementById('hint-text');
-        const answerInput = document.getElementById('answer-input');
-        const submitBtn = document.getElementById('submit-btn');
-        const messageArea = document.getElementById('message-area');
-        const gameContent = document.getElementById('game-content');
-        const victoryContent = document.getElementById('victory-content');
-        const gameOverContent = document.getElementById('game-over-content');
-        const container = document.getElementById('game-container');
-        const introScreen = document.getElementById('intro-screen');
-        const prevBtn = document.getElementById('prev-btn');
-        const nextBtn = document.getElementById('next-btn');
-        const body = document.body;
-        const mainTitle = document.getElementById('main-title');
-
-        // Oldal betöltése
-        if (!localStorage.getItem(INTRO_KEY)) {
-            introScreen.classList.remove('hidden');
-            container.classList.add('hidden');
-        } else {
-            introScreen.classList.add('hidden');
-            container.classList.remove('hidden');
-            initGame();
-        }
+        if (!localStorage.getItem('escape_intro_v6')) { ui.introScr.classList.remove('hidden'); ui.container.classList.add('hidden'); } 
+        else { ui.introScr.classList.add('hidden'); ui.container.classList.remove('hidden'); initGame(); }
 
         document.getElementById('start-game-btn').addEventListener('click', () => {
-            localStorage.setItem(INTRO_KEY, 'true');
-            introScreen.classList.add('hidden');
-            container.classList.remove('hidden');
-            initGame();
+            localStorage.setItem('escape_intro_v6', 'true'); ui.introScr.classList.add('hidden'); ui.container.classList.remove('hidden'); initGame();
         });
 
         function initGame() {
-            maxUnlockedLevel = parseInt(localStorage.getItem(MAX_LVL_KEY)) || 0;
-            if (maxUnlockedLevel < 0 || maxUnlockedLevel > totalLevels) maxUnlockedLevel = 0;
-            currentLevel = maxUnlockedLevel; // A legmagasabb elért szintre dobja be
-            
-            if (currentLevel >= totalLevels) {
-                showVictory();
-                return;
-            }
-
-            endTime = parseInt(localStorage.getItem(ENDTIME_KEY)) || (Date.now() + TIME_LIMIT_MS);
-            if (!localStorage.getItem(ENDTIME_KEY)) localStorage.setItem(ENDTIME_KEY, endTime);
-
-            hintsUsed = JSON.parse(localStorage.getItem(HINT_KEY)) || [];
-
-            startTimer();
-            renderLevel();
+            if (maxUnlockedLevel >= totalLevels) { showVictory(); return; }
+            endTime = parseInt(localStorage.getItem('escape_time_v6')) || (Date.now() + TIME_LIMIT_MS);
+            if (!localStorage.getItem('escape_time_v6')) localStorage.setItem('escape_time_v6', endTime);
+            startTimer(); renderLevel();
         }
 
-        function startTimer() {
-            clearInterval(timerInterval);
-            timerInterval = setInterval(updateTimerDisplay, 1000);
-            updateTimerDisplay();
+        function startTimer() { clearInterval(timerInterval); timerInterval = setInterval(updateTimer, 1000); updateTimer(); }
+        function updateTimer() {
+            const timeLeft = endTime - Date.now();
+            if (timeLeft <= 0) { clearInterval(timerInterval); ui.timerDisp.textContent = "00:00:00"; showGameOver(); return; }
+            ui.timerDisp.classList.toggle('warning', timeLeft < 10 * 60 * 1000);
+            const h = Math.floor((timeLeft % 86400000) / 3600000), m = Math.floor((timeLeft % 3600000) / 60000), s = Math.floor((timeLeft % 60000) / 1000);
+            ui.timerDisp.textContent = `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
         }
 
-        function updateTimerDisplay() {
-            const now = Date.now();
-            const timeLeft = endTime - now;
-
-            if (timeLeft <= 0) {
-                clearInterval(timerInterval);
-                timerDisplay.textContent = "00:00:00";
-                showGameOver();
-                return;
-            }
-
-            if (timeLeft < 10 * 60 * 1000) {
-                timerDisplay.classList.add('warning');
-            } else {
-                timerDisplay.classList.remove('warning');
-            }
-
-            const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
-
-            timerDisplay.textContent = 
-                String(hours).padStart(2, '0') + ":" + 
-                String(minutes).padStart(2, '0') + ":" + 
-                String(seconds).padStart(2, '0');
-        }
-
-        function typeWriterEffect(text) {
-            clearInterval(typeOutInterval);
-            riddleText.textContent = "";
-            cursor.classList.remove('hidden');
-            let i = 0;
-            
-            riddleBox.onclick = () => {
-                clearInterval(typeOutInterval);
-                riddleText.textContent = text;
-                cursor.classList.add('hidden');
-                riddleBox.onclick = null;
-            };
-
+        function typeWriter(text) {
+            clearInterval(typeOutInterval); ui.riddleText.textContent = ""; ui.cursor.classList.remove('hidden'); let i = 0;
+            ui.riddleBox.onclick = () => { clearInterval(typeOutInterval); ui.riddleText.textContent = text; ui.cursor.classList.add('hidden'); ui.riddleBox.onclick = null; };
             typeOutInterval = setInterval(() => {
-                if (i < text.length) {
-                    riddleText.textContent += text.charAt(i);
-                    i++;
-                } else {
-                    clearInterval(typeOutInterval);
-                    cursor.classList.add('hidden');
-                    riddleBox.onclick = null;
-                }
-            }, 30);
+                if (i < text.length) { ui.riddleText.textContent += text.charAt(i++); } 
+                else { clearInterval(typeOutInterval); ui.cursor.classList.add('hidden'); ui.riddleBox.onclick = null; }
+            }, 25);
         }
 
         function renderLevel() {
-            gameContent.classList.remove('hidden');
-            victoryContent.classList.add('hidden');
-            gameOverContent.classList.add('hidden');
+            ui.gameCont.classList.remove('hidden'); ui.vicCont.classList.add('hidden'); ui.overCont.classList.add('hidden');
+            ui.levelDisp.textContent = `Szint: ${currentLevel + 1} / ${totalLevels}`;
             
-            levelDisplay.textContent = `Szint: ${currentLevel + 1} / ${totalLevels}`;
-            
-            // Vírus mód UI
-            if (levels[currentLevel].type === 'scramble') {
-                body.classList.add('virus-active');
-                container.classList.add('virus-active');
-                mainTitle.textContent = "⚠ RENDSZERHIBA ⚠";
-            } else {
-                body.classList.remove('virus-active');
-                container.classList.remove('virus-active');
-                mainTitle.textContent = "Project: Szabadulás";
-            }
+            const isVirus = levels[currentLevel].type === 'scramble';
+            ui.body.classList.toggle('virus-active', isVirus); ui.container.classList.toggle('virus-active', isVirus);
+            ui.title.textContent = isVirus ? "⚠ RENDSZERHIBA ⚠" : "Project: Szabadulás";
 
-            // Gombok megjelenítése
-            prevBtn.style.display = currentLevel > 0 ? 'inline-block' : 'none';
-            nextBtn.style.display = currentLevel < maxUnlockedLevel ? 'inline-block' : 'none';
+            ui.prevBtn.style.display = currentLevel > 0 ? 'inline-block' : 'none';
+            ui.nextBtn.style.display = currentLevel < maxUnlockedLevel && currentLevel < totalLevels - 1 ? 'inline-block' : 'none';
 
-            // Tipp logika
-            if (hintsUsed.includes(currentLevel)) {
-                hintBtn.classList.add('hidden');
-                hintText.textContent = levels[currentLevel].hint;
-                hintText.classList.remove('hidden');
-            } else {
-                hintBtn.classList.remove('hidden');
-                hintText.classList.add('hidden');
-            }
+            if (hintsUsed.includes(currentLevel)) { ui.hintBtn.classList.add('hidden'); ui.hintText.textContent = levels[currentLevel].hint; ui.hintText.classList.remove('hidden'); } 
+            else { ui.hintBtn.classList.remove('hidden'); ui.hintText.classList.add('hidden'); }
 
-            typeWriterEffect(levels[currentLevel].question);
+            typeWriter(levels[currentLevel].question);
 
-            // Ha a szintet már megoldotta korábban
             if (currentLevel < maxUnlockedLevel) {
-                answerInput.value = "MEGOLDVA";
-                answerInput.disabled = true;
-                submitBtn.disabled = true;
-                
+                ui.answerIn.value = "MEGOLDVA"; ui.answerIn.disabled = ui.submitBtn.disabled = true;
                 let msg = "✓ Ezt a biztonsági zárat már feltörted.";
-                if (levels[currentLevel].fragment) {
-                    msg += `<br><br><span style="color:var(--hint-color); font-size:1.4rem;">[ RENDSZERÜZENET: Jegyezd meg ezt a karaktert: <strong>${levels[currentLevel].fragment}</strong> ]</span>`;
-                }
-                messageArea.innerHTML = msg;
-                messageArea.className = "message success";
+                if (levels[currentLevel].fragment) msg += `<br><br><span style="color:var(--hint-color); font-size:1.4rem;">[ RENDSZERÜZENET: Kódmorzsa regisztrálva: <strong>${levels[currentLevel].fragment}</strong> ]</span>`;
+                showMsg(msg, "success", true);
             } else {
-                answerInput.disabled = false;
-                answerInput.value = "";
-                answerInput.focus();
-                submitBtn.disabled = false;
-                messageArea.innerHTML = "";
-                messageArea.className = "message";
+                ui.answerIn.disabled = ui.submitBtn.disabled = false; ui.answerIn.value = ""; ui.answerIn.focus(); showMsg("", "message");
             }
         }
 
-        // Navigáció
-        prevBtn.addEventListener('click', () => { if (currentLevel > 0) { currentLevel--; renderLevel(); } });
-        nextBtn.addEventListener('click', () => { if (currentLevel < maxUnlockedLevel) { currentLevel++; renderLevel(); } });
+        ui.prevBtn.addEventListener('click', () => { if (currentLevel > 0) { currentLevel--; renderLevel(); } });
+        ui.nextBtn.addEventListener('click', () => { if (currentLevel < maxUnlockedLevel) { currentLevel++; renderLevel(); } });
 
-        // Tipp kérése
-        hintBtn.addEventListener('click', () => {
-            const timeLeft = endTime - Date.now();
-            if (timeLeft < 5 * 60 * 1000) {
-                showMessage("Nincs elég időd tipphez!", "error");
-                return;
-            }
-
-            if(confirm("Biztosan kérsz tippet? Ezzel 5 percet veszítesz a küldetésből!")) {
-                endTime -= 5 * 60 * 1000;
-                localStorage.setItem(ENDTIME_KEY, endTime);
-                
-                const penalty = document.createElement('div');
-                penalty.textContent = "-5 PERC";
-                penalty.className = 'time-penalty-anim';
-                container.appendChild(penalty);
-                setTimeout(() => penalty.remove(), 1500);
-
-                hintsUsed.push(currentLevel);
-                localStorage.setItem(HINT_KEY, JSON.stringify(hintsUsed));
-                
-                hintBtn.classList.add('hidden');
-                hintText.textContent = levels[currentLevel].hint;
-                hintText.classList.remove('hidden');
-                updateTimerDisplay();
+        ui.hintBtn.addEventListener('click', () => {
+            if (endTime - Date.now() < 300000) return showMsg("Nincs elég időd tipphez!", "error");
+            if(confirm("Biztosan kérsz tippet? Ezzel 5 percet veszítesz!")) {
+                endTime -= 300000; localStorage.setItem('escape_time_v6', endTime);
+                const pen = document.createElement('div'); pen.textContent = "-5 PERC"; pen.className = 'time-penalty-anim'; ui.container.appendChild(pen);
+                setTimeout(() => pen.remove(), 1500);
+                hintsUsed.push(currentLevel); localStorage.setItem('escape_hints_v6', JSON.stringify(hintsUsed));
+                ui.hintBtn.classList.add('hidden'); ui.hintText.textContent = levels[currentLevel].hint; ui.hintText.classList.remove('hidden'); updateTimer();
             }
         });
 
-        // Vírus - Billentyűzet összekeverés
-        answerInput.addEventListener('keydown', function(e) {
-            if (levels[currentLevel] && levels[currentLevel].type === 'scramble' && !this.disabled) {
-                if (e.key.length === 1 && /[a-z]/i.test(e.key) && !e.ctrlKey && !e.altKey && !e.metaKey) {
-                    e.preventDefault(); 
-                    let char = e.key.toLowerCase();
-                    let mappedChar = reverseMap[char] || char;
-                    const start = this.selectionStart;
-                    const end = this.selectionEnd;
-                    this.value = this.value.substring(0, start) + mappedChar.toUpperCase() + this.value.substring(end);
-                    this.setSelectionRange(start + 1, start + 1);
-                }
+        ui.answerIn.addEventListener('keydown', function(e) {
+            if (levels[currentLevel].type === 'scramble' && !this.disabled && e.key.length === 1 && /[a-z]/i.test(e.key) && !e.ctrlKey && !e.metaKey) {
+                e.preventDefault(); 
+                let char = e.key.toLowerCase(); let mappedChar = reverseMap[char] || char;
+                const start = this.selectionStart, end = this.selectionEnd;
+                this.value = this.value.substring(0, start) + mappedChar.toUpperCase() + this.value.substring(end);
+                this.setSelectionRange(start + 1, start + 1);
             }
         });
 
-        // ⚠ A TITKOSÍTÁS FELOLDÁSA A JAVASCRIPTBEN ⚠
-        // A kód lecsupaszítja, megfordítja és base64-be kódolja a beírt szót, majd ezt hasonlítja össze.
-        function encodeInput(str) {
-            let normalized = str.toLowerCase().replace(/\s+/g, '').normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-            let reversed = normalized.split('').reverse().join('');
-            return btoa(reversed); // Btoa = Base64 kódolás
-        }
+        function encodeInput(str) { return btoa(str.toLowerCase().replace(/\s+/g, '').normalize("NFD").replace(/[\u0300-\u036f]/g, "").split('').reverse().join('')); }
 
         function checkAnswer() {
-            if (answerInput.disabled) return;
-
-            const rawInput = answerInput.value;
-            if (rawInput === "") {
-                showMessage("Üres kód! Kérlek gépelj be valamit.", "error");
-                triggerShake();
-                return;
-            }
-
-            const encodedUserInput = encodeInput(rawInput);
-            const correctEncodedAnswers = levels[currentLevel].encodedAnswers;
-
-            if (correctEncodedAnswers.includes(encodedUserInput)) {
+            if (ui.answerIn.disabled) return;
+            if (ui.answerIn.value === "") return triggerShake("Üres kód!");
+            
+            if (levels[currentLevel].encodedAnswers.includes(encodeInput(ui.answerIn.value))) {
                 let msg = "✓ Kód elfogadva. Tűzfal feltörve.";
-                if (levels[currentLevel].fragment) {
-                    msg += `<br><br><span style="color:var(--hint-color); font-size:1.4rem;">[ RENDSZERÜZENET: Jegyezd meg ezt a karaktert: <strong>${levels[currentLevel].fragment}</strong> ]</span>`;
-                }
+                if (levels[currentLevel].fragment) msg += `<br><br><span style="color:var(--hint-color); font-size:1.4rem;">[ RENDSZERÜZENET: ÚJ KÓDMORZSA: <strong>${levels[currentLevel].fragment}</strong> ]</span>`;
+                showMsg(msg, "success", true);
                 
-                showMessage(msg, "success", true);
-                
-                if (currentLevel === maxUnlockedLevel) {
-                    maxUnlockedLevel++;
-                    localStorage.setItem(MAX_LVL_KEY, maxUnlockedLevel);
-                }
-                
-                submitBtn.disabled = true;
-                answerInput.disabled = true;
-                
-                setTimeout(() => {
-                    if (maxUnlockedLevel >= totalLevels) {
-                        showVictory();
-                    } else {
-                        currentLevel = maxUnlockedLevel;
-                        renderLevel();
-                    }
-                }, levels[currentLevel].fragment ? 4000 : 1500); // Több időt hagyunk az olvasásra, ha van fragment
-            } else {
-                showMessage("✗ Hozzáférés megtagadva. Hibás kód.", "error");
-                triggerShake();
-            }
+                if (currentLevel === maxUnlockedLevel) { maxUnlockedLevel++; localStorage.setItem('escape_max_v6', maxUnlockedLevel); }
+                ui.submitBtn.disabled = ui.answerIn.disabled = true;
+                setTimeout(() => { maxUnlockedLevel >= totalLevels ? showVictory() : (currentLevel = maxUnlockedLevel, renderLevel()); }, levels[currentLevel].fragment ? 4000 : 1500);
+            } else triggerShake("✗ Hozzáférés megtagadva. Hibás kód.");
         }
 
-        function triggerShake() {
-            answerInput.classList.add('shake');
-            setTimeout(() => answerInput.classList.remove('shake'), 400);
-            answerInput.value = "";
-            answerInput.focus();
-        }
+        function triggerShake(msg) { showMsg(msg, "error"); ui.answerIn.classList.add('shake'); setTimeout(() => ui.answerIn.classList.remove('shake'), 400); ui.answerIn.value = ""; ui.answerIn.focus(); }
+        function showMsg(msg, type, isHtml = false) { isHtml ? ui.msgArea.innerHTML = msg : ui.msgArea.textContent = msg; ui.msgArea.className = `message ${type}`; }
+        function showVictory() { clearInterval(timerInterval); clearInterval(typeOutInterval); ui.body.classList.remove('virus-active'); ui.container.classList.remove('virus-active'); ui.gameCont.classList.add('hidden'); ui.overCont.classList.add('hidden'); ui.vicCont.classList.remove('hidden'); document.getElementById('final-time').textContent = ui.timerDisp.textContent; ui.levelDisp.textContent = "KÜLDETÉS TELJESÍTVE"; }
+        function showGameOver() { clearInterval(typeOutInterval); ui.body.classList.remove('virus-active'); ui.container.classList.remove('virus-active'); ui.gameCont.classList.add('hidden'); ui.vicCont.classList.add('hidden'); ui.overCont.classList.remove('hidden'); ui.levelDisp.textContent = "KÜLDETÉS ELBUKVA"; }
+        function resetGame() { maxUnlockedLevel = currentLevel = 0; hintsUsed = []; endTime = Date.now() + TIME_LIMIT_MS; localStorage.setItem('escape_max_v6', 0); localStorage.setItem('escape_hints_v6', "[]"); localStorage.setItem('escape_time_v6', endTime); startTimer(); renderLevel(); }
 
-        function showMessage(msg, type, isHtml = false) {
-            if(isHtml) {
-                messageArea.innerHTML = msg;
-            } else {
-                messageArea.textContent = msg;
-            }
-            messageArea.className = `message ${type}`;
-        }
-
-        function showVictory() {
-            clearInterval(timerInterval);
-            clearInterval(typeOutInterval);
-            body.classList.remove('virus-active');
-            container.classList.remove('virus-active');
-            gameContent.classList.add('hidden');
-            gameOverContent.classList.add('hidden');
-            victoryContent.classList.remove('hidden');
-            document.getElementById('final-time').textContent = timerDisplay.textContent;
-            levelDisplay.textContent = "KÜLDETÉS TELJESÍTVE";
-        }
-
-        function showGameOver() {
-            clearInterval(typeOutInterval);
-            body.classList.remove('virus-active');
-            container.classList.remove('virus-active');
-            gameContent.classList.add('hidden');
-            victoryContent.classList.add('hidden');
-            gameOverContent.classList.remove('hidden');
-            levelDisplay.textContent = "KÜLDETÉS ELBUKVA";
-        }
-
-        function resetGame() {
-            maxUnlockedLevel = 0;
-            currentLevel = 0;
-            hintsUsed = [];
-            endTime = Date.now() + TIME_LIMIT_MS;
-            
-            localStorage.setItem(MAX_LVL_KEY, 0);
-            localStorage.setItem(HINT_KEY, JSON.stringify([]));
-            localStorage.setItem(ENDTIME_KEY, endTime);
-            
-            startTimer();
-            renderLevel();
-        }
-
-        submitBtn.addEventListener('click', checkAnswer);
-        answerInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') checkAnswer(); });
-        document.getElementById('restart-btn-win').addEventListener('click', resetGame);
-        document.getElementById('restart-btn-lose').addEventListener('click', resetGame);
-        document.getElementById('hard-reset-btn').addEventListener('click', () => {
-            if(confirm("Biztosan mindent törölsz? Ezt nem lehet visszavonni!")) resetGame();
-        });
+        ui.submitBtn.addEventListener('click', checkAnswer);
+        ui.answerIn.addEventListener('keypress', (e) => { if (e.key === 'Enter') checkAnswer(); });
+        document.getElementById('restart-btn-win').addEventListener('click', resetGame); document.getElementById('restart-btn-lose').addEventListener('click', resetGame);
+        document.getElementById('hard-reset-btn').addEventListener('click', () => { if(confirm("Biztosan mindent törölsz?")) resetGame(); });
     </script>
 </body>
 </html>
