@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kódolt Mesterségek - HARDCORE Szabadulószoba</title>
+    <title>Kódolt Mesterségek - EXTREME Szabadulószoba</title>
     <style>
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #1a252f; color: #ecf0f1; text-align: center; padding: 20px; margin: 0; }
-        #game-box { background: #2c3e50; padding: 30px; border-radius: 15px; max-width: 650px; margin: auto; box-shadow: 0 10px 30px rgba(0,0,0,0.8); border: 2px solid #34495e; }
+        #game-box { background: #2c3e50; padding: 30px; border-radius: 15px; max-width: 650px; margin: auto; box-shadow: 0 10px 30px rgba(0,0,0,0.8); border: 2px solid #34495e; position: relative; overflow: hidden; }
         h1 { color: #e74c3c; text-transform: uppercase; letter-spacing: 2px;}
         .warning { background: #c0392b; padding: 15px; border-radius: 5px; font-weight: bold; margin-bottom: 10px; font-size: 18px; }
         .info { background: #2980b9; padding: 10px; border-radius: 5px; font-weight: bold; margin-bottom: 20px; }
@@ -21,7 +21,7 @@
         .btn-back:hover { background: #95a5a6; }
         .btn-next { background: #2ecc71; }
         .btn-next:hover { background: #27ae60; }
-        .btn-restart { background: #c0392b; margin-top: 20px; }
+        .btn-restart { background: #c0392b; margin-top: 20px; font-size: 12px; padding: 8px 15px; }
         .btn-restart:hover { background: #e74c3c; }
         .level-title { color: #3498db; border-bottom: 1px solid #3498db; padding-bottom: 10px; }
         
@@ -39,20 +39,21 @@
         .morse-code { font-family: monospace; font-size: 26px; letter-spacing: 4px; color: #f1c40f; background: #333; padding: 15px; border-radius: 5px; display: inline-block; border: 1px solid #7f8c8d;}
         .emoji-riddle { font-size: 40px; margin: 20px 0; letter-spacing: 10px; }
         
-        /* Rejtett dolgok */
+        /* Rejtett dolgok (beleolvad a háttérbe, csak kijelöléssel látszik) */
         .hidden-text { color: #2c3e50; user-select: text; transition: 0.3s; }
         .hidden-text::selection { background: #f1c40f; color: #000; }
+        .hidden-emoji::selection { background: #f1c40f; }
     </style>
 </head>
 <body>
 
 <div id="game-box">
     <h1>Kódolt Mesterségek</h1>
-    <div class="warning">⚠️ FIGYELEM: Ez nem egy sima teszt! Figyelj a részletekre, jelöld ki az egereddel a gyanús üres részeket, és kombinálj! Vegyél elő papírt!</div>
+    <div class="warning">⚠️ FIGYELEM: Ne bízz a szemedben! Ebben a játékban nem minden kérdés látható, és a falak titkokat rejtenek. Használd az egered, tapogasd ki a sötétet!</div>
     <div class="info">ℹ️ SZABÁLY: Minden választ ÉKEZETEK NÉLKÜL, csak betűkkel írj be!</div>
     <div id="timer">01:00:00</div>
     
-    <div id="level-container" style="position: relative;"></div>
+    <div id="level-container" style="position: relative; min-height: 250px;"></div>
     
     <div style="margin-top: 30px; border-top: 1px solid #7f8c8d; padding-top: 20px;">
         <button class="btn-back" onclick="prevLevel()">⬅️ Előző</button>
@@ -64,59 +65,59 @@
 
 <script>
     const levels = [
-        { type: 'simple', title: '1. Állomás: Az első próba', text: '<div class="emoji-riddle">🔨🔥🐎🧲</div><br>Mi a mesterségem?', answer: 'a292YWNz' },
-        { type: 'morse', title: '2. Állomás: Titkos távirat', text: 'Nem minden az, aminek látszik. Keresd a fényt a sötétségben (vagy az egereddel).<br><br><div class="morse-code">-- . ... - . .-.</div><br><span class="hidden-text">Kiváló! Írd fel a papírodra ezt: TITKOS SZÁM = 4815</span>', answer: 'bWVzdGVy' },
+        { type: 'simple', title: '1. Állomás: Az első próba', text: '<div class="emoji-riddle">🔨🔥🐎🧲</div><br>Mi a mesterségem?<span class="hidden-text" style="position:absolute; bottom:0px; left:10px; font-size:12px;">X=48</span>', answer: 'a292YWNz' },
+        { type: 'morse', title: '2. Állomás: Titkos távirat', text: 'Nem minden az, aminek látszik. Keresd a fényt a sötétségben (vagy az egereddel).<br><br><div class="morse-code">-- . ... - . .-.</div>', answer: 'bWVzdGVy' },
         { type: 'simple', title: '3. Állomás: Szemfényvesztés', text: 'Keresd a szót, amit a sötétség elrejtett előled. Jelöld ki a lenti üres dobozt!<br><br><div style="background:#2c3e50; padding:20px; border-radius:5px;"><span class="hidden-text" style="font-size:24px; font-weight:bold;">asztalos</span></div>', answer: 'YXN6dGFsb3M=' },
-        { type: 'scrambled', title: '4. Állomás: Káosz', text: 'Válaszd ki a megfelelő betűket a gombok közül: Az édes bűnök művésze.<br><div class="secret-letter">Megtaláltál egy Titkos Betűt: <strong>K</strong></div>', answer: 'Y3VrcmFzeg==', letters: ['Z', 'B', 'C', 'R', 'O', 'K', 'S', 'L', 'U', 'P', 'A'] },
+        { type: 'scrambled', title: '4. Állomás: Káosz', text: 'Válaszd ki a megfelelő betűket a gombok közül: Az édes bűnök művésze.<br><div class="secret-letter">Megtaláltál egy Titkos Betűt: <strong>K</strong></div><span class="hidden-text" style="position:absolute; top:-10px; right:15px; font-size:12px;">Y=15</span>', answer: 'Y3VrcmFzeg==', letters: ['Z', 'B', 'C', 'R', 'O', 'K', 'S', 'L', 'U', 'P', 'A'] },
         { type: 'simple', title: '5. Állomás: Emoji nyelv', text: 'Fejtsd meg az üzenetet:<br><div class="emoji-riddle">✂️🧵👗👔</div>', answer: 'c3phYm8=' },
         { type: 'phone', title: '6. Állomás: Hajnali hívás', text: 'Hívd azt, aki a ropogós reggelit készíti! Használd a retro telefon gombjait (SMS gépelés, nyomd többször a gombot a többi betűért!).', answer: 'cGVr' },
-        { type: 'simple', title: '7. Állomás: A Talány', text: '<em>"Talpam van, de nem járok. Nyelvem van, de nem beszélek. Ha megbetegszem, hozzá visznek."</em> Ki gyógyít meg engem?', answer: 'Y2lwZXN6' },
-        { type: 'simple', title: '8. Állomás: A Múlt árnyéka', text: 'Csak akkor mehetsz tovább, ha emlékszel. Mi volt az a 4 jegyű TITKOS SZÁM, amit a 2. állomáson a sötétségből kiolvastál?<br><div class="secret-letter">Egy újabb Titkos Betű: <strong>E</strong></div>', answer: 'NDgxNQ==' },
+        { type: 'simple', title: '7. Állomás: A Talány', text: '<span class="hidden-text" style="font-size:20px;"><em>"Talpam van, de nem járok. Nyelvem van, de nem beszélek. Ha megbetegszem, hozzá visznek."</em> Ki gyógyít meg engem?</span>', answer: 'Y2lwZXN6' },
+        { type: 'simple', title: '8. Állomás: A Múlt árnyéka', text: 'Minden a részletekben rejlik. Mi volt az a 4 jegyű szám (X és Y összeolvasva), ami az eddigi utadon a sötétben rejtőzött?<br><div class="secret-letter">Egy újabb Titkos Betű: <strong>E</strong></div>', answer: 'NDgxNQ==' },
         { type: 'simple', title: '9. Állomás: Vizuális egyenlet', text: '<div class="emoji-riddle">🐑 + 🐕 + ⛰️ + 🎶 = ?</div>', answer: 'anVoYXN6' },
         { type: 'scrambled', title: '10. Állomás: A magasban', text: 'A ház tetején táncol, fával dolgozik.', answer: 'YWNz', letters: ['K', 'C', 'T', 'S', 'O', 'A', 'R'] },
         { type: 'simple', title: '11. Állomás: Caesar hagyatéka', text: 'Ezt a szót a "Rot3" módszerrel titkosították (minden betűt 3-mal eltoltak az ábécében). Fejtsd vissza!<br><br><strong style="font-size:24px; color:#e74c3c;">IDCHNDV</strong>', answer: 'ZmF6ZWthcw==' },
         { type: 'morse', title: '12. Állomás: Forgó világ', text: 'A szekerek kerekeinek tudósa.<br><br><div class="morse-code">-... --- --. -. .- .-.</div><br><div class="secret-letter">Egy újabb Titkos Betű a végkifejlethez: <strong>Z</strong></div>', answer: 'Ym9nbmFy' },
-        { type: 'simple', title: '13. Állomás: A Gépek Nyelve', text: 'A mesterség neve bináris kódba van rejtve. Konvertáld át szöveggé (ASCII)!<br><br><strong style="font-size: 16px; letter-spacing: 2px;">01110100 01101001 01101101 01100001 01110010</strong>', answer: 'dGltYXI=' },
+        { type: 'simple', title: '13. Állomás: A Gépek Nyelve', text: 'A mesterség neve bináris kódba van rejtve. Konvertáld át szöveggé (ASCII)!<br><br><strong style="font-size: 16px; letter-spacing: 2px;">01110100 01101001 01101101 01100001 01110010</strong><div class="hidden-text" style="position:absolute; bottom:50px; right:0px; font-size:14px; transform:rotate(-90deg);">Alpha: 73</div>', answer: 'dGltYXI=' },
         { type: 'scrambled', title: '14. Állomás: Fa és vas', text: 'A bor lakhelyének építője.', answer: 'a2FkYXI=', letters: ['B', 'D', 'E', 'R', 'K', 'L', 'A', 'M', 'A'] },
         { type: 'simple', title: '15. Állomás: A természet ereje', text: '<em>"Ha a szél fúj, én dolgozom. Ha a víz folyik, én dolgozom. Ruhám mindig fehér porral van fedve."</em> Ki vagyok én?', answer: 'bW9sbmFy' },
         { type: 'phone', title: '16. Állomás: Csendes vizeken', text: 'Keresd ki a telefonon az emojikhoz tartozó gombokat (Retro SMS írás): <br><div class="emoji-riddle">🐟🛶🎣</div><br><div class="secret-letter">Megszerezted a 4. Titkos Betűt: <strong>M</strong></div>', answer: 'aGFsYXN6' },
-        { type: 'simple', title: '17. Állomás: Az erdő fia', text: '<div class="emoji-riddle">🌲🦌🔫🐗</div>', answer: 'dmFkYXN6' },
+        { type: 'simple', title: '17. Állomás: Az erdő fia', text: '<span class="hidden-text"><div class="emoji-riddle hidden-emoji">🌲🦌🔫🐗</div></span>', answer: 'dmFkYXN6' },
         { type: 'scrambled', title: '18. Állomás: A bárd embere', text: 'Kolbász, szalonna, tőkehús...', answer: 'aGVudGVz', letters: ['A', 'S', 'R', 'E', 'H', 'P', 'E', 'K', 'N', 'T'] },
-        { type: 'simple', title: '19. Állomás: Visszafelé', text: 'Ezt a mesterséget tükörből kell olvasnod. Írd be helyesen!<br><br><strong style="font-size: 30px; letter-spacing: 5px;">ZSARDOF</strong>', answer: 'Zm9kcmFzeg==' },
-        { type: 'morse', title: '20. Állomás: Penge és hab', text: 'A férfiak arcának karbantartója.<br><br><div class="morse-code">-... --- .-. -... . .-.. -.--</div><br><br><span style="color:#e74c3c; font-weight:bold;">ÁLLJ! ÍRD FEL AZ ÚJ KÓDOT: 7321</span><br><div class="secret-letter">A Titkos Betűd: <strong>U</strong></div>', answer: 'Ym9yYmVseQ==' },
+        { type: 'simple', title: '19. Állomás: Visszafelé', text: 'Ezt a mesterséget tükörből kell olvasnod. Írd be helyesen!<br><br><strong style="font-size: 30px; letter-spacing: 5px;">ZSARDOF</strong><div class="hidden-text" style="position:absolute; top:40px; left:0px; font-size:11px;">Omega: 21</div>', answer: 'Zm9kcmFzeg==' },
+        { type: 'morse', title: '20. Állomás: Penge és hab', text: 'A férfiak arcának karbantartója.<br><br><div class="morse-code">-... --- .-. -... . .-.. -.--</div><br><div class="secret-letter">A Titkos Betűd: <strong>U</strong></div>', answer: 'Ym9yYmVseQ==' },
         { type: 'simple', title: '21. Állomás: A csillogás mestere', text: 'A legnemesebb fémek formálója. Neve 5 betű, és visszafelé olvasva: <strong>SOVTO</strong>', answer: 'b3R2b3M=' },
         { type: 'scrambled', title: '22. Állomás: Törékeny határok', text: 'Átlátszó falakat épít a házakra.', answer: 'dXZlZ2Vz', letters: ['L', 'V', 'O', 'S', 'R', 'U', 'E', 'T', 'G', 'E'] },
         { type: 'simple', title: '23. Állomás: Az idő mestere', text: '<div class="emoji-riddle">⏳⌚⚙️🔎</div>', answer: 'b3Jhcw==' },
-        { type: 'simple', title: '24. Állomás: Zárolt memória', text: 'Idézd fel a MÁSODIK KÓDOT, amit piros betűkkel kaptál a 20. állomáson!<br><div class="secret-letter">Bónusz Titkos Betű: <strong>V</strong></div>', answer: 'NzMyMQ==' },
+        { type: 'simple', title: '24. Állomás: Zárolt memória', text: 'Idézd fel a MÁSODIK 4 jegyű számot (Alpha és Omega kombinációját), amit az előző szinteken a legváratlanabb, sötét helyeken hagytak neked!<br><div class="secret-letter">Bónusz Titkos Betű: <strong>V</strong></div>', answer: 'NzMyMQ==' },
         { type: 'simple', title: '25. Állomás: A Hacker', text: 'Egy gép ezt dobta ki. Fejtsd vissza Base64 kódolásból!<br><br><strong style="background:#000; color:#0f0; padding:10px; font-family:monospace;">a2VydGVzeg==</strong>', answer: 'a2VydGVzeg==' },
         { type: 'phone', title: '26. Állomás: Forró vonal', text: 'Írd be a telefonon az emojikhoz tartozó gombokat (SMS)!<br><div class="emoji-riddle">👨‍🍳🔪🍲</div>', answer: 'c3pha2Fjcw==' },
-        { type: 'simple', title: '27. Állomás: A sötétség fiai', text: '<em>"Mélyen a föld alatt, a sötétségben keresem a fényt, a szenet és az ércet."</em> Ki vagyok?', answer: 'YmFueWFzeg==' },
+        { type: 'simple', title: '27. Állomás: A sötétség fiai', text: '<span class="hidden-text" style="font-size:20px;"><em>"Mélyen a föld alatt, a sötétségben keresem a fényt, a szenet és az ércet."</em> Ki vagyok?</span>', answer: 'YmFueWFzeg==' },
         { type: 'scrambled', title: '28. Állomás: Zöld őrszem', text: 'A rengeteg fák védelmezője.<br><div class="secret-letter">Titkos Betű: <strong>E</strong></div>', answer: 'ZXJkZXN6', letters: ['A', 'Z', 'M', 'R', 'E', 'V', 'S', 'K', 'D', 'E', 'P'] },
         { type: 'simple', title: '29. Állomás: Apró munkások', text: '<div class="emoji-riddle">🐝🍯🌼</div>', answer: 'bWVoZXN6' },
         { type: 'morse', title: '30. Állomás: Hírhozó', text: 'Híreket és csomagokat hoz papíron.<br><br><div class="morse-code">.--. --- ... - .- ...</div>', answer: 'cG9zdGFz' },
         { type: 'simple', title: '31. Állomás: A csend ellensége', text: '<em>"A lélek gyógyítója. 12 hangból világot épít, de soha nem szólal meg szavakkal."</em>', answer: 'emVuZXN6' },
         { type: 'scrambled', title: '32. Állomás: Ezer arc', text: 'Más bőrébe bújik minden este a színpadon.<br><div class="secret-letter">Titkos Betű: <strong>S</strong></div>', answer: 'c3ppbmVzeg==', letters: ['O', 'Z', 'S', 'P', 'Z', 'A', 'I', 'L', 'N', 'E', 'S'] },
-        { type: 'simple', title: '33. Állomás: Néma költészet', text: '<div class="emoji-riddle">🎨🖌️🖼️</div>', answer: 'ZmVzdG8=' },
+        { type: 'simple', title: '33. Állomás: Rendszerhiba', text: 'A gép meghibásodott, és a kérdés szavaiban lévő betűket teljesen összekeverte! Fejtsd meg, mit kérdez, majd írd be a mesterséget!<br><br><div style="font-size: 24px; font-weight: bold; color: #e74c3c; background: #222; padding: 15px; border-radius: 5px; letter-spacing: 2px; margin-top: 15px;">"iK székíti a otprérkat és a tjkpkééeta?"</div>', answer: 'ZmVzdG8=' },
         { type: 'phone', title: '34. Állomás: Kőbe vésve', text: 'Üsd be a gombokon: <br><div class="emoji-riddle">🗿🔨🪨</div>', answer: 'c3pvYnJhc3o=' },
-        { type: 'simple', title: '35. Állomás: Gutenberg örököse', text: 'Nélküle a könyvek és az újságok sosem jutottak volna el a tömegekhez. Ki ő?', answer: 'bnlvbWRhc3o=' },
+        { type: 'simple', title: '35. Állomás: Gutenberg örököse', text: '<span class="hidden-text" style="font-size:22px;">Nélküle a könyvek és az újságok sosem jutottak volna el a tömegekhez. Ki ő?</span>', answer: 'bnlvbWRhc3o=' },
         { type: 'scrambled', title: '36. Állomás: Piszkos szerencse', text: 'Kormos az arca, de ha megfogod a gombod, szerencsét hoz.<br><div class="secret-letter">Titkos Betű: <strong>E</strong></div>', answer: 'a2VtZW55c2Vwcm8=', letters: ['A', 'M', 'L', 'O', 'T', 'P', 'K', 'Z', 'E', 'N', 'Y', 'S', 'E', 'R', 'E', 'G'] },
         { type: 'simple', title: '37. Állomás: A vonalak ura', text: 'Vonalzó, körző, tervrajz. Ő álmodja meg a tereket és a házakat.', answer: 'ZXBpdGVzeg==' },
         { type: 'morse', title: '38. Állomás: A test szerelője', text: '<div class="morse-code">--- .-. ...- --- ...</div>', answer: 'b3J2b3M=' },
         { type: 'simple', title: '39. Állomás: Fehér abrosz', text: '<div class="emoji-riddle">🍽️🍷🤵‍♂️</div>', answer: 'cGluY2Vy' },
         { type: 'scrambled', title: '40. Állomás: Az elme diadala', text: 'Az ipar agya, a gépek szülője.<br><div class="secret-letter">Az UTOLSÓ Titkos Betű: <strong>K</strong></div>', answer: 'bWVybm9r', letters: ['A', 'R', 'S', 'M', 'T', 'N', 'E', 'P', 'K', 'O'] },
         { type: 'simple', title: '🔑 41. Állomás: A Végső Zár', text: 'A játék során 10 titkos betűt gyűjtöttél össze. Rakd őket megfelelő sorrendbe egyetlen szóként!<br><br><strong>Súgó:</strong> Olyan (többes számban lévő) gyűjtőfogalom, ami azokat az embereket jelöli, akik a kezükkel alkotnak értéket.', answer: 'a2V6bXV2ZXNlaw==' },
-        { type: 'end', title: '🎉 GRATULÁLOK! KIJUTOTTÁL! 🎉', text: 'Sikeresen teljesítetted mind a 40 hardcore szintet, dekódoltad a titkokat és feltörted a Mesterjelszót is! Zseniális vagy!' }
+        { type: 'end', title: '🎉 GRATULÁLOK! KIJUTOTTÁL! 🎉', text: 'Sikeresen teljesítetted mind a 40 hardcore szintet, dekódoltad a láthatatlan titkokat és feltörted a Mesterjelszót is! Zseniális vagy!' }
     ];
 
-    // Állapotok betöltése
-    let maxLevelReached = parseInt(localStorage.getItem('escape_max_level_hc')) || 0;
-    let currentLevel = parseInt(localStorage.getItem('escape_level_hc')) || 0;
-    let time = parseInt(localStorage.getItem('escape_time_hc'));
-    if (isNaN(time)) time = 7200;
+    // Új kulcsnevek a biztos reset érdekében
+    let maxLevelReached = parseInt(localStorage.getItem('escape_max_level_final')) || 0;
+    let currentLevel = parseInt(localStorage.getItem('escape_level_final')) || 0;
+    let time = parseInt(localStorage.getItem('escape_time_final'));
+    if (isNaN(time)) time = 3600; // Pontosan 1 óra
 
     let customInputValue = "";
+    let timerInterval = null;
 
-    // Telefon billentyűzet logikához szükséges változók
     const phoneMap = {
         '1': '1', '2': 'abc2', '3': 'def3',
         '4': 'ghi4', '5': 'jkl5', '6': 'mno6',
@@ -127,10 +128,17 @@
     let lastPhoneTime = 0;
     let phoneClickIndex = 0;
 
+    function startTimer() {
+        if(timerInterval) clearInterval(timerInterval);
+        timerInterval = setInterval(updateTimer, 1000);
+        updateTimer();
+    }
+
     function updateTimer() {
         if (time <= 0) {
             document.getElementById('timer').innerText = "AZ IDŐ LEJÁRT!";
             document.getElementById('timer').style.color = "red";
+            clearInterval(timerInterval);
             return;
         }
         let h = Math.floor(time / 3600);
@@ -141,11 +149,11 @@
         
         if(levels[currentLevel].type !== 'end') {
             time--;
-            localStorage.setItem('escape_time_hc', time);
+            localStorage.setItem('escape_time_final', time);
+        } else {
+            clearInterval(timerInterval);
         }
     }
-    setInterval(updateTimer, 1000);
-    updateTimer();
 
     function renderLevel() {
         const container = document.getElementById('level-container');
@@ -209,18 +217,15 @@
         if(document.getElementById('ans')) document.getElementById('ans').focus();
     }
 
-    // Gombos telefon SMS gépelés logikája
     function handlePhoneClick(num) {
         let now = Date.now();
         let chars = phoneMap[num];
         if (!chars) return;
 
-        // Ha ugyanazt a gombot nyomja meg 1 másodpercen belül
         if (num === lastPhoneKey && (now - lastPhoneTime) < 1000) {
             phoneClickIndex = (phoneClickIndex + 1) % chars.length;
             customInputValue = customInputValue.slice(0, -1) + chars[phoneClickIndex];
         } else {
-            // Új gomb, vagy letelt az idő -> új karakter
             phoneClickIndex = 0;
             customInputValue += chars[0];
         }
@@ -256,10 +261,10 @@
             
             if (currentLevel > maxLevelReached) {
                 maxLevelReached = currentLevel;
-                localStorage.setItem('escape_max_level_hc', maxLevelReached);
+                localStorage.setItem('escape_max_level_final', maxLevelReached);
             }
             
-            localStorage.setItem('escape_level_hc', currentLevel);
+            localStorage.setItem('escape_level_final', currentLevel);
             renderLevel();
         } else {
             document.body.style.backgroundColor = "#c0392b";
@@ -279,7 +284,7 @@
     function prevLevel() { 
         if (currentLevel > 0) { 
             currentLevel--; 
-            localStorage.setItem('escape_level_hc', currentLevel);
+            localStorage.setItem('escape_level_final', currentLevel);
             renderLevel(); 
         } 
     }
@@ -287,27 +292,29 @@
     function nextLevel() {
         if (currentLevel < maxLevelReached) {
             currentLevel++;
-            localStorage.setItem('escape_level_hc', currentLevel);
+            localStorage.setItem('escape_level_final', currentLevel);
             renderLevel();
         }
     }
 
     function restartGame() {
         if (confirm("Biztosan elölről akarod kezdeni az egész játékot? Minden eddigi eredményed és időd elvész!")) {
-            localStorage.removeItem('escape_level_hc');
-            localStorage.removeItem('escape_max_level_hc');
-            localStorage.removeItem('escape_time_hc');
+            localStorage.removeItem('escape_level_final');
+            localStorage.removeItem('escape_max_level_final');
+            localStorage.removeItem('escape_time_final');
             
             currentLevel = 0;
             maxLevelReached = 0;
-            time = 7200; // Visszaáll 2 órára
+            time = 3600; // Pontosan 1 órára állítva
             clearCustomInput();
             
-            document.getElementById('timer').style.color = "#f1c40f"; // Időzítő színének visszaállítása
+            document.getElementById('timer').style.color = "#f1c40f"; 
+            startTimer(); // Újraindítjuk az időzítőt
             renderLevel();
         }
     }
 
+    startTimer();
     renderLevel();
 </script>
 </body>
