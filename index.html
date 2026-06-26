@@ -39,17 +39,36 @@
         .morse-code { font-family: monospace; font-size: 26px; letter-spacing: 4px; color: #f1c40f; background: #333; padding: 15px; border-radius: 5px; display: inline-block; border: 1px solid #7f8c8d;}
         .emoji-riddle { font-size: 40px; margin: 20px 0; letter-spacing: 10px; }
         
-        /* Rejtett dolgok (beleolvad a háttérbe, csak kijelöléssel látszik) */
-        .hidden-text { color: #2c3e50; user-select: text; transition: 0.3s; }
+        /* Mobilos és iOS barát rejtett dolgok */
+        .hidden-text { 
+            color: #2c3e50; 
+            user-select: text; 
+            transition: 0.3s; 
+            cursor: pointer; 
+            -webkit-tap-highlight-color: transparent; 
+        }
         .hidden-text::selection { background: #f1c40f; color: #000; }
-        .hidden-emoji::selection { background: #f1c40f; }
+        .hidden-text.revealed {
+            color: #f1c40f;
+            background: rgba(0,0,0,0.5);
+            padding: 2px 5px;
+            border-radius: 5px;
+            text-shadow: 1px 1px 2px #000;
+        }
+        .hidden-emoji { 
+            opacity: 0; 
+            transition: 0.5s; 
+        }
+        .hidden-text.revealed .hidden-emoji {
+            opacity: 1;
+        }
     </style>
 </head>
 <body>
 
 <div id="game-box">
     <h1>Kódolt Mesterségek</h1>
-    <div class="warning">⚠️ FIGYELEM: Ne bízz a szemedben! Ebben a játékban nem minden kérdés látható, és a falak titkokat rejtenek. Használd az egered, tapogasd ki a sötétet!</div>
+    <div class="warning">⚠️ FIGYELEM: Ne bízz a szemedben! A falak titkokat rejtenek. Használd az egered a kijelölésre, vagy telefonon BÖKJ RÁ a gyanús üres részekre!</div>
     <div class="info">ℹ️ SZABÁLY: Minden választ ÉKEZETEK NÉLKÜL, csak betűkkel írj be!</div>
     <div id="timer">01:00:00</div>
     
@@ -67,7 +86,7 @@
     const levels = [
         { type: 'simple', title: '1. Állomás: Az első próba', text: '<div class="emoji-riddle">🔨🔥🐎🧲</div><br>Mi a mesterségem?<span class="hidden-text" style="position:absolute; bottom:0px; left:10px; font-size:12px;">X=48</span>', answer: 'a292YWNz' },
         { type: 'morse', title: '2. Állomás: Titkos távirat', text: 'Nem minden az, aminek látszik. Keresd a fényt a sötétségben (vagy az egereddel).<br><br><div class="morse-code">-- . ... - . .-.</div>', answer: 'bWVzdGVy' },
-        { type: 'simple', title: '3. Állomás: Szemfényvesztés', text: 'Keresd a szót, amit a sötétség elrejtett előled. Jelöld ki a lenti üres dobozt!<br><br><div style="background:#2c3e50; padding:20px; border-radius:5px;"><span class="hidden-text" style="font-size:24px; font-weight:bold;">asztalos</span></div>', answer: 'YXN6dGFsb3M=' },
+        { type: 'simple', title: '3. Állomás: Szemfényvesztés', text: 'Keresd a szót, amit a sötétség elrejtett előled. Kattints/bökj a lenti üres dobozba!<br><br><div style="background:#2c3e50; padding:20px; border-radius:5px;"><span class="hidden-text" style="font-size:24px; font-weight:bold;">asztalos</span></div>', answer: 'YXN6dGFsb3M=' },
         { type: 'scrambled', title: '4. Állomás: Káosz', text: 'Válaszd ki a megfelelő betűket a gombok közül: Az édes bűnök művésze.<br><div class="secret-letter">Megtaláltál egy Titkos Betűt: <strong>K</strong></div><span class="hidden-text" style="position:absolute; top:-10px; right:15px; font-size:12px;">Y=15</span>', answer: 'Y3VrcmFzeg==', letters: ['Z', 'B', 'C', 'R', 'O', 'K', 'S', 'L', 'U', 'P', 'A'] },
         { type: 'simple', title: '5. Állomás: Emoji nyelv', text: 'Fejtsd meg az üzenetet:<br><div class="emoji-riddle">✂️🧵👗👔</div>', answer: 'c3phYm8=' },
         { type: 'phone', title: '6. Állomás: Hajnali hívás', text: 'Hívd azt, aki a ropogós reggelit készíti! Használd a retro telefon gombjait (SMS gépelés, nyomd többször a gombot a többi betűért!).', answer: 'cGVr' },
@@ -109,11 +128,10 @@
         { type: 'end', title: '🎉 GRATULÁLOK! KIJUTOTTÁL! 🎉', text: 'Sikeresen teljesítetted mind a 40 hardcore szintet, dekódoltad a láthatatlan titkokat és feltörted a Mesterjelszót is! Zseniális vagy!' }
     ];
 
-    // Új kulcsnevek a biztos reset érdekében
     let maxLevelReached = parseInt(localStorage.getItem('escape_max_level_final')) || 0;
     let currentLevel = parseInt(localStorage.getItem('escape_level_final')) || 0;
     let time = parseInt(localStorage.getItem('escape_time_final'));
-    if (isNaN(time)) time = 3600; // Pontosan 1 óra
+    if (isNaN(time)) time = 3600; 
 
     let customInputValue = "";
     let timerInterval = null;
@@ -179,41 +197,50 @@
             let decodedAnswer = atob(lvl.answer).toUpperCase();
             html += `<div class="solved-box">✅ Ezt a feladatot már teljesítetted!<br><span style="font-size: 14px; font-weight: normal;">A helyes válasz ez volt:</span><br><span style="font-size: 24px;">${decodedAnswer}</span></div>`;
             container.innerHTML = html;
-            return;
+        } else {
+            if (lvl.type === 'simple' || lvl.type === 'morse') {
+                html += `<input type="text" id="ans" placeholder="Válasz ékezetek nélkül..." autocomplete="off" onkeypress="handleEnter(event)">`;
+                html += `<br><button onclick="checkSimple()">Kód feltörése</button>`;
+            } 
+            else if (lvl.type === 'scrambled') {
+                html += `<div id="custom-input-display"></div>`;
+                html += `<div class="keyboard-grid">`;
+                lvl.letters.forEach(letter => {
+                    html += `<button class="key-btn" onclick="addChar('${letter}')">${letter}</button>`;
+                });
+                html += `</div>`;
+                html += `<button class="btn-back" onclick="clearCustomInput()">Törlés</button> <button onclick="checkCustom()">Kód feltörése</button>`;
+            }
+            else if (lvl.type === 'phone') {
+                html += `<div id="custom-input-display"></div>`;
+                const phoneKeys = [
+                    {num: '1', let: ''}, {num: '2', let: 'A B C'}, {num: '3', let: 'D E F'},
+                    {num: '4', let: 'G H I'}, {num: '5', let: 'J K L'}, {num: '6', let: 'M N O'},
+                    {num: '7', let: 'P Q R S'}, {num: '8', let: 'T U V'}, {num: '9', let: 'W X Y Z'},
+                    {num: '*', let: ''}, {num: '0', let: '_'}, {num: '#', let: ''}
+                ];
+                html += `<div class="phone-grid">`;
+                phoneKeys.forEach(k => {
+                    html += `<button class="phone-btn" onclick="handlePhoneClick('${k.num}')">
+                                <span>${k.num}</span><span class="phone-sub">${k.let}</span>
+                             </button>`;
+                });
+                html += `</div>`;
+                html += `<button class="btn-back" onclick="clearCustomInput()">Törlés</button> <button onclick="checkCustom()">Kód feltörése</button>`;
+            }
+            container.innerHTML = html;
         }
 
-        if (lvl.type === 'simple' || lvl.type === 'morse') {
-            html += `<input type="text" id="ans" placeholder="Válasz ékezetek nélkül..." autocomplete="off" onkeypress="handleEnter(event)">`;
-            html += `<br><button onclick="checkSimple()">Kód feltörése</button>`;
-        } 
-        else if (lvl.type === 'scrambled') {
-            html += `<div id="custom-input-display"></div>`;
-            html += `<div class="keyboard-grid">`;
-            lvl.letters.forEach(letter => {
-                html += `<button class="key-btn" onclick="addChar('${letter}')">${letter}</button>`;
+        // iOS és Mobil barát titkos szöveg felfedő logika
+        document.querySelectorAll('.hidden-text').forEach(el => {
+            el.addEventListener('click', function() {
+                this.classList.add('revealed');
             });
-            html += `</div>`;
-            html += `<button class="btn-back" onclick="clearCustomInput()">Törlés</button> <button onclick="checkCustom()">Kód feltörése</button>`;
-        }
-        else if (lvl.type === 'phone') {
-            html += `<div id="custom-input-display"></div>`;
-            const phoneKeys = [
-                {num: '1', let: ''}, {num: '2', let: 'A B C'}, {num: '3', let: 'D E F'},
-                {num: '4', let: 'G H I'}, {num: '5', let: 'J K L'}, {num: '6', let: 'M N O'},
-                {num: '7', let: 'P Q R S'}, {num: '8', let: 'T U V'}, {num: '9', let: 'W X Y Z'},
-                {num: '*', let: ''}, {num: '0', let: '_'}, {num: '#', let: ''}
-            ];
-            html += `<div class="phone-grid">`;
-            phoneKeys.forEach(k => {
-                html += `<button class="phone-btn" onclick="handlePhoneClick('${k.num}')">
-                            <span>${k.num}</span><span class="phone-sub">${k.let}</span>
-                         </button>`;
-            });
-            html += `</div>`;
-            html += `<button class="btn-back" onclick="clearCustomInput()">Törlés</button> <button onclick="checkCustom()">Kód feltörése</button>`;
-        }
+            el.addEventListener('touchstart', function() {
+                this.classList.add('revealed');
+            }, {passive: true});
+        });
 
-        container.innerHTML = html;
         if(document.getElementById('ans')) document.getElementById('ans').focus();
     }
 
@@ -305,11 +332,11 @@
             
             currentLevel = 0;
             maxLevelReached = 0;
-            time = 3600; // Pontosan 1 órára állítva
+            time = 3600; 
             clearCustomInput();
             
             document.getElementById('timer').style.color = "#f1c40f"; 
-            startTimer(); // Újraindítjuk az időzítőt
+            startTimer(); 
             renderLevel();
         }
     }
