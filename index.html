@@ -39,28 +39,31 @@
         .morse-code { font-family: monospace; font-size: 26px; letter-spacing: 4px; color: #f1c40f; background: #333; padding: 15px; border-radius: 5px; display: inline-block; border: 1px solid #7f8c8d;}
         .emoji-riddle { font-size: 40px; margin: 20px 0; letter-spacing: 10px; }
         
-        /* Mobilos és iOS barát rejtett dolgok */
+        /* Rejtett dolgok iOS kompatibilisen */
         .hidden-text { 
             color: #2c3e50; 
+            -webkit-user-select: text; 
             user-select: text; 
-            transition: 0.3s; 
-            cursor: pointer; 
-            -webkit-tap-highlight-color: transparent; 
         }
-        .hidden-text::selection { background: #f1c40f; color: #000; }
-        .hidden-text.revealed {
-            color: #f1c40f;
-            background: rgba(0,0,0,0.5);
-            padding: 2px 5px;
-            border-radius: 5px;
-            text-shadow: 1px 1px 2px #000;
-        }
+        /* PC / Android natív kijelölés */
+        .hidden-text::selection { background: #f1c40f; color: #000; -webkit-text-fill-color: #000; }
+        .hidden-text::-moz-selection { background: #f1c40f; color: #000; }
+        
         .hidden-emoji { 
-            opacity: 0; 
-            transition: 0.5s; 
+            opacity: 0.01; 
+            -webkit-user-select: text; 
+            user-select: text; 
         }
-        .hidden-text.revealed .hidden-emoji {
-            opacity: 1;
+        .hidden-emoji::selection { background: #f1c40f; opacity: 1; }
+        
+        /* Ezt a JS adja hozzá iOS-en a sikeres kijelöléshez */
+        .revealed-by-selection {
+            background-color: #f1c40f !important;
+            color: #000 !important;
+            -webkit-text-fill-color: #000 !important;
+        }
+        .revealed-by-selection .hidden-emoji, .hidden-emoji.revealed-by-selection {
+            opacity: 1 !important;
         }
     </style>
 </head>
@@ -68,7 +71,7 @@
 
 <div id="game-box">
     <h1>Kódolt Mesterségek</h1>
-    <div class="warning">⚠️ FIGYELEM: Ne bízz a szemedben! A falak titkokat rejtenek. Használd az egered a kijelölésre, vagy telefonon BÖKJ RÁ a gyanús üres részekre!</div>
+    <div class="warning">⚠️ FIGYELEM: Ne bízz a szemedben! A falak titkokat rejtenek. Húzd az ujjad vagy az egered a gyanús üres részekre, és JELÖLD KI őket a sötétben!</div>
     <div class="info">ℹ️ SZABÁLY: Minden választ ÉKEZETEK NÉLKÜL, csak betűkkel írj be!</div>
     <div id="timer">01:00:00</div>
     
@@ -86,7 +89,7 @@
     const levels = [
         { type: 'simple', title: '1. Állomás: Az első próba', text: '<div class="emoji-riddle">🔨🔥🐎🧲</div><br>Mi a mesterségem?<span class="hidden-text" style="position:absolute; bottom:0px; left:10px; font-size:12px;">X=48</span>', answer: 'a292YWNz' },
         { type: 'morse', title: '2. Állomás: Titkos távirat', text: 'Nem minden az, aminek látszik. Keresd a fényt a sötétségben (vagy az egereddel).<br><br><div class="morse-code">-- . ... - . .-.</div>', answer: 'bWVzdGVy' },
-        { type: 'simple', title: '3. Állomás: Szemfényvesztés', text: 'Keresd a szót, amit a sötétség elrejtett előled. Kattints/bökj a lenti üres dobozba!<br><br><div style="background:#2c3e50; padding:20px; border-radius:5px;"><span class="hidden-text" style="font-size:24px; font-weight:bold;">asztalos</span></div>', answer: 'YXN6dGFsb3M=' },
+        { type: 'simple', title: '3. Állomás: Szemfényvesztés', text: 'Keresd a szót, amit a sötétség elrejtett előled. Jelöld ki a lenti üres dobozt!<br><br><div style="background:#2c3e50; padding:20px; border-radius:5px;"><span class="hidden-text" style="font-size:24px; font-weight:bold;">asztalos</span></div>', answer: 'YXN6dGFsb3M=' },
         { type: 'scrambled', title: '4. Állomás: Káosz', text: 'Válaszd ki a megfelelő betűket a gombok közül: Az édes bűnök művésze.<br><div class="secret-letter">Megtaláltál egy Titkos Betűt: <strong>K</strong></div><span class="hidden-text" style="position:absolute; top:-10px; right:15px; font-size:12px;">Y=15</span>', answer: 'Y3VrcmFzeg==', letters: ['Z', 'B', 'C', 'R', 'O', 'K', 'S', 'L', 'U', 'P', 'A'] },
         { type: 'simple', title: '5. Állomás: Emoji nyelv', text: 'Fejtsd meg az üzenetet:<br><div class="emoji-riddle">✂️🧵👗👔</div>', answer: 'c3phYm8=' },
         { type: 'phone', title: '6. Állomás: Hajnali hívás', text: 'Hívd azt, aki a ropogós reggelit készíti! Használd a retro telefon gombjait (SMS gépelés, nyomd többször a gombot a többi betűért!).', answer: 'cGVr' },
@@ -145,6 +148,19 @@
     let lastPhoneKey = null;
     let lastPhoneTime = 0;
     let phoneClickIndex = 0;
+
+    // Globális figyelő: ha kijelölnek valamit az oldalon (Kifejezetten iOS hiba javítása)
+    document.addEventListener("selectionchange", function() {
+        const selection = window.getSelection();
+        document.querySelectorAll('.hidden-text, .hidden-emoji').forEach(el => {
+            // Ha a kijelölés tartalmazza ezt az elemet, rárakjuk a láthatóságot adó CSS osztályt
+            if (selection.rangeCount > 0 && selection.containsNode(el, true) && selection.toString().length > 0) {
+                el.classList.add('revealed-by-selection');
+            } else {
+                el.classList.remove('revealed-by-selection');
+            }
+        });
+    });
 
     function startTimer() {
         if(timerInterval) clearInterval(timerInterval);
@@ -230,16 +246,6 @@
             }
             container.innerHTML = html;
         }
-
-        // iOS és Mobil barát titkos szöveg felfedő logika
-        document.querySelectorAll('.hidden-text').forEach(el => {
-            el.addEventListener('click', function() {
-                this.classList.add('revealed');
-            });
-            el.addEventListener('touchstart', function() {
-                this.classList.add('revealed');
-            }, {passive: true});
-        });
 
         if(document.getElementById('ans')) document.getElementById('ans').focus();
     }
